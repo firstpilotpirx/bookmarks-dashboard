@@ -95,6 +95,13 @@ const ButtonTransparent = styled.div`
   border-radius: 50%;
 `;
 
+const ButtonPlus = styled.div`
+  width: ${RoundButtonSize}em;
+  color: white;
+  font-size: 50%;
+  text-align: center;
+`;
+
 const ButtonContent = styled.div`
   display: flex;
   justify-content: space-between;
@@ -165,39 +172,42 @@ const AddressBar = styled.div`
 `;
 
 export interface BookmarkWidgetProps {
+  id: string;
   url: string;
-  hostname: string;
+  name: string;
   iconBase64: string;
   previewBase64?: string;
+  onDeleteBookmarkClick: (id: string) => void;
 }
 
-export const BookmarkWidget = ({ url, hostname, iconBase64, previewBase64 }: BookmarkWidgetProps): JSX.Element => (
-  <BookmarkWidgetContainer
-    onClick={() => {
-      window.location.replace(url);
-    }}
-  >
+export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDeleteBookmarkClick }: BookmarkWidgetProps): JSX.Element => (
+  <BookmarkWidgetContainer>
     <BookmarkWidgetHeader />
     <BookmarkWidgetBody>
       <BookmarkPreviewTitleBar>
         <ButtonContent>
-          <ButtonRed />
+          <ButtonRed onClick={() => onDeleteBookmarkClick(id)} />
           <ButtonYellow />
           <ButtonGreen />
         </ButtonContent>
         <AddressBar>
           <Ico iconBase64={iconBase64} />
           <AddressContainer>
-            <Address>{hostname.slice(0, 30)}</Address>
+            <Address>{name.slice(0, 30)}</Address>
           </AddressContainer>
         </AddressBar>
         <ButtonContent>
           <ButtonTransparent />
           <ButtonTransparent />
-          <ButtonTransparent />
+          <ButtonPlus>+</ButtonPlus>
         </ButtonContent>
       </BookmarkPreviewTitleBar>
-      <BookmarkPreview previewBase64={previewBase64} />
+      <BookmarkPreview
+        onClick={() => {
+          window.location.replace(url);
+        }}
+        previewBase64={previewBase64}
+      />
     </BookmarkWidgetBody>
   </BookmarkWidgetContainer>
 );

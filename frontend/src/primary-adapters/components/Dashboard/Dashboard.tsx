@@ -15,20 +15,22 @@ export interface DashboardProps {
   bookmarks: Bookmark[];
   onWidgetClick: (url: string) => void;
   onAddBookmarkClick: (url: string) => void;
+  onDeleteBookmarkClick: (id: string) => void;
 }
 
 // @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Dashboard = ({ bookmarks, onWidgetClick, onAddBookmarkClick }: DashboardProps): JSX.Element => (
+export const Dashboard = ({ bookmarks, onWidgetClick, onAddBookmarkClick, onDeleteBookmarkClick }: DashboardProps): JSX.Element => (
   <DashboardContainer>
-    {bookmarks.map((bookmark, index) => (
-      // eslint-disable-next-line react/no-array-index-key
+    {bookmarks.map((bookmark) => (
       <BookmarkWidget
-        key={index}
+        key={bookmark.id}
+        id={bookmark.id}
         url={bookmark.url}
-        hostname={bookmark.hostname}
+        name={bookmark.name}
         iconBase64={bookmark.iconBase64}
         previewBase64={bookmark.previewBase64}
+        onDeleteBookmarkClick={onDeleteBookmarkClick}
       />
     ))}
     <CreateBookmarkWidget>

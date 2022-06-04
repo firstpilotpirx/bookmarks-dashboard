@@ -1,11 +1,14 @@
 import fastify from 'fastify';
 import generated from '@fastify/cors';
-import { BookmarkSqliteRepository } from '../secondary-adapters/sqlite/bookmark.sqlite.repository';
+import { BookmarkJsonRepository } from '../secondary-adapters/json/bookmark.json.repository';
 import { CreateNewBookmarkUseCase } from '../core/bookmark/use-cases/create-new-bookmark.use-case';
 import { Base64ResizerSharpService } from '../secondary-adapters/sharp/base64-resizer.sharp.service';
 import { ReadAllBookmarksUseCase } from '../core/bookmark/use-cases/read-all-bookmarks.use-case';
-import { PageScreenshotMakerPlaywrightService } from '../secondary-adapters/playwright/page-screenshot-maker.playwright.service';
-import { IconFetcherGoogleS2FaviconAxiosService } from '../secondary-adapters/axios/icon-fetcher-google-s2-favicon.axios.service';
+import { PagePreviewMakerPlaywrightService } from '../secondary-adapters/playwright/page-preview-maker.playwright.service';
+import { PageIconMakerGoogleS2FaviconAxiosService } from '../secondary-adapters/axios/page-icon-maker-google-s2-favicon.axios.service';
+import { BookmarkFactoryService } from '../core/bookmark/services/bookmark-factory.service';
+import { UuidUuidjsService } from '../secondary-adapters/uuidjs/uuid.uuidjs.service';
+import { DeleteOneBookmarkUseCase } from '../core/bookmark/use-cases/delete-one-bookmark.use-case';
 
 export class ServerParam {
   constructor(public readonly host: string, public readonly port: number) {}
@@ -16,19 +19,29 @@ export class FastifyServerService {
   constructor(private port: number = 3334) {
     this.server.register(generated, { origin: true });
 
-    const pageScreenshotMaker = new PageScreenshotMakerPlaywrightService(Math.floor(1600 / 1.2), Math.floor(900 / 1.2));
-    // const pageScreenshotMaker = new PageScreenshotMakerSeleniumService();
-    const bookmarkRepository = new BookmarkSqliteRepository();
+    const bookmarkRepository = new BookmarkJsonRepository();
+
+    const uuidService = new UuidUuidjsService();
+    const pageIconMakerService = new PageIconMakerGoogleS2FaviconAxiosService();
+    const pagePreviewMaker = new PagePreviewMakerPlaywrightService(Math.floor(1600 / 1.2), Math.floor(900 / 1.2));
     const base64Resizer = new Base64ResizerSharpService();
-    // const iconFetcher = new IconFetcherFaviconAxiosService();
-    const iconFetcher = new IconFetcherGoogleS2FaviconAxiosService();
-    const createBookmarkUseCase = new CreateNewBookmarkUseCase(bookmarkRepository, pageScreenshotMaker, base64Resizer, iconFetcher);
+    const bookmarkFactoryService = new BookmarkFactoryService(uuidService, pageIconMakerService, pagePreviewMaker, base64Resizer);
+
+    const createBookmarkUseCase = new CreateNewBookmarkUseCase(bookmarkFactoryService, bookmarkRepository);
     const readAllBookmarksUseCase = new ReadAllBookmarksUseCase(bookmarkRepository);
+    const deleteOneBookmarkUseCase = new DeleteOneBookmarkUseCase(bookmarkRepository);
 
     this.server.post('/bookmark', async (request, _reply) => {
       const url = (request.body as { url: string }).url;
       const name = (request.body as { name: string }).name;
       await createBookmarkUseCase.execute(url, name);
+      return { result: 'ok' };
+    });
+
+    this.server.delete('/bookmark/:id', async (request, _reply) => {
+      const id = (request.params as { id: string }).id;
+      await deleteOneBookmarkUseCase.execute(id);
+
       return { result: 'ok' };
     });
 
@@ -40,7 +53,7 @@ export class FastifyServerService {
     curl -X POST http://localhost:3334/bookmark -H 'Content-Type: application/json' -d '{"url":"https://www.youtube.com","name":"my name"}'
 */
     // this.server.post('/screenshot/base64', async (request, _reply) => {
-    //   const screenshotMaker = new PageScreenshotMakerPlaywrightService();
+    //   const screenshotMaker = new PagePreviewMakerPlaywrightService();
     //   const screenshot = await screenshotMaker.takeBase64((request.body as { url: string }).url);
     //   return { base64: screenshot };
     // });

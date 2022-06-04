@@ -1,11 +1,11 @@
-import { PageScreenshotMaker } from '../../core/bookmark/services/page-screenshot-maker.service';
+import { PagePreviewMaker } from '../../core/bookmark/services/page-preview-maker.service';
 import webdriver from 'selenium-webdriver';
 
-export class PageScreenshotMakerSeleniumService implements PageScreenshotMaker {
+export class PagePreviewMakerSeleniumService implements PagePreviewMaker {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   constructor(private readonly width = 1600, private readonly height = 900) {}
-  async takeBase64(url: string): Promise<string> {
+  async makeBase64(url: string): Promise<string> {
     // const safariOptions = new safari.Options();
     // safariOptions.set('user-data-dir', '/Users/pirx/Library/Safari/');
     // safariOptions.set('resolution', `${this.width}x${this.height}`);

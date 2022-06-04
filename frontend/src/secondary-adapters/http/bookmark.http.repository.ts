@@ -11,9 +11,13 @@ export class BookmarkHttpRepository implements BookmarkRepository {
   }
 
   async readAll(): Promise<Bookmark[]> {
-    const response = await axios.get<{ url: string; name: string; previewBase64: string; iconBase64: string }[]>(
-      'http://localhost:3334/bookmark',
+    const response = await axios.get<Bookmark[]>('http://localhost:3334/bookmark');
+    return response.data.map(
+      (bookmark) => new Bookmark(bookmark.id, bookmark.url, bookmark.name, bookmark.previewBase64, bookmark.iconBase64),
     );
-    return response.data.map((bookmark) => new Bookmark(bookmark.name, bookmark.url, bookmark.previewBase64, bookmark.iconBase64));
+  }
+
+  async deleteOne(id: string): Promise<void> {
+    await axios.delete(`http://localhost:3334/bookmark/${id}`);
   }
 }

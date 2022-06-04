@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LinkRefIconFetcherService } from '../../core/bookmark/services/link-ref-icon-fetcher.service';
+import { PageIconMakerService } from '../../core/bookmark/services/page-icon-maker.service';
 
 export enum IconSize {
   ICON_32 = '32',
@@ -9,9 +9,10 @@ export enum IconSize {
   ICON_144 = '144',
 }
 
-export class IconFetcherGoogleS2FaviconAxiosService implements LinkRefIconFetcherService {
+export class PageIconMakerGoogleS2FaviconAxiosService implements PageIconMakerService {
   private size = IconSize.ICON_64;
-  async fetch(hostname: string): Promise<string> {
+  async makeBase64(url: string): Promise<string> {
+    const hostname = new URL(url).hostname;
     const response = await axios.get(`https://www.google.com/s2/favicons?sz=${this.size}&domain_url=${hostname}`, {
       responseType: 'arraybuffer',
     });
