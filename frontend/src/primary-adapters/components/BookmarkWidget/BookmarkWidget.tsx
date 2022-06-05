@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 import { SmallSpinner } from '../SmallSpinner/SmallSpinner';
 
 const height = 9 * 15;
@@ -202,6 +203,8 @@ export interface BookmarkWidgetProps {
 
 export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDeleteBookmarkClick }: BookmarkWidgetProps): JSX.Element => {
   // console.log(previewBase64);
+
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
   console.log('');
   return (
     <BookmarkWidgetContainer>
@@ -209,7 +212,12 @@ export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDel
       <BookmarkWidgetBody>
         <BookmarkPreviewTitleBar>
           <ButtonContent>
-            <ButtonRed onClick={() => onDeleteBookmarkClick(id)} />
+            <ButtonRed
+              onClick={() => {
+                setIsDeleted(true);
+                onDeleteBookmarkClick(id);
+              }}
+            />
             <ButtonYellow />
             <ButtonGreen />
           </ButtonContent>
@@ -226,7 +234,7 @@ export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDel
           </ButtonContent>
         </BookmarkPreviewTitleBar>
         <BookmarkPagePreviewLink href={url}>
-          {id === '' ? (
+          {id === '' || isDeleted ? (
             <BookmarkPagePreviewSpinnerContainer>
               <SmallSpinner />
             </BookmarkPagePreviewSpinnerContainer>

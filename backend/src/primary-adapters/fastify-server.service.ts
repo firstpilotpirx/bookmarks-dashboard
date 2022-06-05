@@ -23,7 +23,7 @@ export class FastifyServerService {
 
     const uuidService = new UuidUuidjsService();
     const pageIconMakerService = new PageIconMakerGoogleS2FaviconAxiosService();
-    const pagePreviewMaker = new PagePreviewMakerPlaywrightService(Math.floor(1600 / 1.2), Math.floor(900 / 1.2));
+    const pagePreviewMaker = new PagePreviewMakerPlaywrightService(Math.floor(1600), Math.floor(900));
     const base64Resizer = new Base64ResizerSharpService();
     const bookmarkFactoryService = new BookmarkFactoryService(uuidService, pageIconMakerService, pagePreviewMaker, base64Resizer);
 
