@@ -5,8 +5,7 @@ import { CreateNewBookmarkUseCase } from '../../../core/bookmark/use-cases/creat
 import { BookmarkHttpRepository } from '../../../secondary-adapters/http/bookmark.http.repository';
 import { ReadAllBookmarksUseCase } from '../../../core/bookmark/use-cases/read-all-bookmarks.use-case';
 import { DeleteOneBookmarkUseCase } from '../../../core/bookmark/use-cases/delete-one-bookmark.use-case';
-
-// const dashboard = new DashboardService();
+import { FullScreenSpinner } from '../FullScreenSpinner/FullScreenSpinner';
 
 const bookmarkRepository = new BookmarkHttpRepository();
 const createNewBookmarkUseCase = new CreateNewBookmarkUseCase(bookmarkRepository);
@@ -15,9 +14,18 @@ const deleteOneBookmarkUseCase = new DeleteOneBookmarkUseCase(bookmarkRepository
 
 const App = (): JSX.Element => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const init = async (): Promise<void> => {
+    const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (darkThemeMq.matches) {
+      console.log('>>>>>>>>> dark');
+    } else {
+      console.log('>>>>>>>>> light');
+    }
+
     setBookmarks([...(await readAllBookmarksUseCase.execute())]);
+    setIsLoading(false);
   };
 
   const [hasBeenCalled, setHasBeenCalled] = useState(false);
@@ -27,7 +35,6 @@ const App = (): JSX.Element => {
       return;
     }
 
-    console.log('init');
     setHasBeenCalled(true);
     init()
       .then(() => {})
@@ -35,20 +42,23 @@ const App = (): JSX.Element => {
   });
 
   return (
-    <Dashboard
-      bookmarks={bookmarks}
-      onWidgetClick={(url: string) => {
-        window.location.href = url;
-      }}
-      onAddBookmarkClick={async (url: string) => {
-        await createNewBookmarkUseCase.execute(url, '');
-        setBookmarks([...(await readAllBookmarksUseCase.execute())]);
-      }}
-      onDeleteBookmarkClick={async (id: string) => {
-        await deleteOneBookmarkUseCase.execute(id);
-        setBookmarks([...(await readAllBookmarksUseCase.execute())]);
-      }}
-    />
+    <div>
+      {isLoading ? <FullScreenSpinner /> : null}
+      {!isLoading ? (
+        <Dashboard
+          bookmarks={bookmarks}
+          onClickCreateBookmark={async (url: string, name: string) => {
+            setBookmarks([...bookmarks, new Bookmark('', url, name, '', '')]);
+            await createNewBookmarkUseCase.execute(url, name);
+            setBookmarks([...(await readAllBookmarksUseCase.execute())]);
+          }}
+          onDeleteBookmarkClick={async (id: string) => {
+            await deleteOneBookmarkUseCase.execute(id);
+            setBookmarks([...(await readAllBookmarksUseCase.execute())]);
+          }}
+        />
+      ) : null}
+    </div>
   );
 };
 

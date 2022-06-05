@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { SmallSpinner } from '../SmallSpinner/SmallSpinner';
 
 const height = 9 * 15;
 const width = 16 * 15;
@@ -9,13 +10,12 @@ const BookmarkWidgetContainer = styled.div`
   justify-content: top;
   align-item: center;
 
-  height: 130px;
-  width: 200px;
-
-  height: ${height + 20}px;
+  height: ${height}px;
   width: ${width}px;
 
-  margin: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin: 0;
 `;
 
 const BookmarkWidgetHeader = styled.div`
@@ -34,10 +34,10 @@ const BookmarkWidgetBody = styled.div`
 
   background-color: rgba(255, 255, 255, 0.45);
   border-radius: 20px;
-  // border: 1px solid rgba(255, 255, 255, 0.25);
-  border: 0px solid black;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  // border: 0px solid black;
   border-radius: 7px;
-  // box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.9);
   // backdrop-filter: blur(15px);
 
   color: white;
@@ -98,7 +98,7 @@ const ButtonTransparent = styled.div`
 const ButtonPlus = styled.div`
   width: ${RoundButtonSize}em;
   color: white;
-  font-size: 50%;
+  font-size: 70%;
   text-align: center;
 `;
 
@@ -113,8 +113,28 @@ export interface BookmarkPreviewProps {
   previewBase64: string | undefined;
 }
 
-const BookmarkPreview = styled.div<BookmarkPreviewProps>`
+const BookmarkPagePreviewLink = styled.a`
+  display: inline-block;
+
+  // display: flex;
+  //
+  // justify-content: center;
+  // align-items: stretch;
+
   height: 85%;
+`;
+
+const BookmarkPagePreviewSpinnerContainer = styled.a`
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+`;
+
+const BookmarkPagePreview = styled.div<BookmarkPreviewProps>`
+  height: 100%;
   background-image: url('data:image/png;base64, ${(props) => props.previewBase64}');
   background-size: 100%;
 
@@ -180,34 +200,41 @@ export interface BookmarkWidgetProps {
   onDeleteBookmarkClick: (id: string) => void;
 }
 
-export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDeleteBookmarkClick }: BookmarkWidgetProps): JSX.Element => (
-  <BookmarkWidgetContainer>
-    <BookmarkWidgetHeader />
-    <BookmarkWidgetBody>
-      <BookmarkPreviewTitleBar>
-        <ButtonContent>
-          <ButtonRed onClick={() => onDeleteBookmarkClick(id)} />
-          <ButtonYellow />
-          <ButtonGreen />
-        </ButtonContent>
-        <AddressBar>
-          <Ico iconBase64={iconBase64} />
-          <AddressContainer>
-            <Address>{name.slice(0, 30)}</Address>
-          </AddressContainer>
-        </AddressBar>
-        <ButtonContent>
-          <ButtonTransparent />
-          <ButtonTransparent />
-          <ButtonPlus>+</ButtonPlus>
-        </ButtonContent>
-      </BookmarkPreviewTitleBar>
-      <BookmarkPreview
-        onClick={() => {
-          window.location.replace(url);
-        }}
-        previewBase64={previewBase64}
-      />
-    </BookmarkWidgetBody>
-  </BookmarkWidgetContainer>
-);
+export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDeleteBookmarkClick }: BookmarkWidgetProps): JSX.Element => {
+  // console.log(previewBase64);
+  console.log('');
+  return (
+    <BookmarkWidgetContainer>
+      <BookmarkWidgetHeader />
+      <BookmarkWidgetBody>
+        <BookmarkPreviewTitleBar>
+          <ButtonContent>
+            <ButtonRed onClick={() => onDeleteBookmarkClick(id)} />
+            <ButtonYellow />
+            <ButtonGreen />
+          </ButtonContent>
+          <AddressBar>
+            <Ico iconBase64={iconBase64} />
+            <AddressContainer>
+              <Address>{name.slice(0, 20)}</Address>
+            </AddressContainer>
+          </AddressBar>
+          <ButtonContent>
+            <ButtonTransparent />
+            <ButtonTransparent />
+            <ButtonPlus>+</ButtonPlus>
+          </ButtonContent>
+        </BookmarkPreviewTitleBar>
+        <BookmarkPagePreviewLink href={url}>
+          {id === '' ? (
+            <BookmarkPagePreviewSpinnerContainer>
+              <SmallSpinner />
+            </BookmarkPagePreviewSpinnerContainer>
+          ) : (
+            <BookmarkPagePreview previewBase64={previewBase64} />
+          )}
+        </BookmarkPagePreviewLink>
+      </BookmarkWidgetBody>
+    </BookmarkWidgetContainer>
+  );
+};

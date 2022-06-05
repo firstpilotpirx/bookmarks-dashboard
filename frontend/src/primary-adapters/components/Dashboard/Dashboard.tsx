@@ -8,19 +8,19 @@ const DashboardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  align-item: center;
+  align-items: center;
+  gap: 20px;
+  margin-left: 20px;
+  margin-top: 20px;
 `;
 
 export interface DashboardProps {
   bookmarks: Bookmark[];
-  onWidgetClick: (url: string) => void;
-  onAddBookmarkClick: (url: string) => void;
+  onClickCreateBookmark: (url: string, name: string) => void;
   onDeleteBookmarkClick: (id: string) => void;
 }
 
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Dashboard = ({ bookmarks, onWidgetClick, onAddBookmarkClick, onDeleteBookmarkClick }: DashboardProps): JSX.Element => (
+export const Dashboard = ({ bookmarks, onClickCreateBookmark, onDeleteBookmarkClick }: DashboardProps): JSX.Element => (
   <DashboardContainer>
     {bookmarks.map((bookmark) => (
       <BookmarkWidget
@@ -34,7 +34,7 @@ export const Dashboard = ({ bookmarks, onWidgetClick, onAddBookmarkClick, onDele
       />
     ))}
     <CreateBookmarkWidget>
-      <CreateBookmarkControl onClick={onAddBookmarkClick} />
+      <CreateBookmarkControl onClickCreateBookmark={onClickCreateBookmark} />
     </CreateBookmarkWidget>
   </DashboardContainer>
 );

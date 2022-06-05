@@ -9,10 +9,10 @@ const CreateBookmarkWidgetContainer = styled.div`
   height: 130px;
   width: 200px;
 
-  height: ${9 * 15 + 20}px;
+  height: ${9 * 15}px;
   width: ${16 * 15}px;
 
-  margin: 10px;
+  margin: 0px;
 `;
 
 const CreateBookmarkWidgetBody = styled.div`
