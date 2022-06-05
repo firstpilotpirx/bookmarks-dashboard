@@ -10,8 +10,7 @@ export class PagePreviewMakerPlaywrightService implements PagePreviewMaker {
       args: [`--window-size=${this.width},${this.height}`],
     });
 
-    const page = await browser.newPage();
-    await page.setViewportSize({ width: this.width, height: this.height });
+    const page = await browser.newPage({ viewport: { width: this.width, height: this.height } });
     await page.goto(url, { timeout: 60000, waitUntil: 'load' });
     const base64 = (await page.screenshot()).toString('base64');
     await page.close();
