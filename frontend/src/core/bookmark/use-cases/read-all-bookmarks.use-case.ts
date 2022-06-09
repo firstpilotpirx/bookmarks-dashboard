@@ -1,17 +1,10 @@
-import { Bookmark } from '../entitties/bookmark';
+import { BookmarkWithPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/bookmark-with-position';
 import { BookmarkRepository } from '../repositories/bookmark.repository';
 
 export class ReadAllBookmarksUseCase {
   constructor(private readonly bookmarkRepository: BookmarkRepository) {}
 
-  async execute(): Promise<Bookmark[]> {
-    try {
-      const book = await this.bookmarkRepository.readAll();
-      console.log('>>>>', book);
-    } catch (error) {
-      console.log(error);
-    }
-
+  async execute(): Promise<BookmarkWithPosition[]> {
     return this.bookmarkRepository.readAll();
   }
 }

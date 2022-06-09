@@ -1,4 +1,4 @@
-import { BookmarkRepository } from '../repositories/bookmark.repository';
+import { BookmarkRepository } from '@bookmarks-dashboard/domain/dist/bookmark/repositories/bookmark.repository';
 
 export class DeleteOneBookmarkUseCase {
   constructor(private readonly bookmarkRepository: BookmarkRepository) {}

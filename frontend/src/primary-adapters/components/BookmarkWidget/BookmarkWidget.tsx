@@ -12,7 +12,8 @@ const BookmarkWidgetContainer = styled.div`
   align-item: center;
 
   height: ${height}px;
-  width: ${width}px;
+  // width: ${width}px;
+  width: 100%;
 
   margin-left: 10px;
   margin-top: 10px;
@@ -31,7 +32,8 @@ const BookmarkWidgetBody = styled.div`
   align-item: center;
 
   height: ${height}px;
-  width: ${width}px;
+  // width: ${width}px;
+  width: 100%;
 
   background-color: rgba(255, 255, 255, 0.45);
   border-radius: 20px;
@@ -202,10 +204,9 @@ export interface BookmarkWidgetProps {
 }
 
 export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDeleteBookmarkClick }: BookmarkWidgetProps): JSX.Element => {
-  // console.log(previewBase64);
-
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
-  console.log('');
+  const [isUrlOpening, setIsUrlOpening] = useState<boolean>(false); // TODO set spinner on full screen
+
   return (
     <BookmarkWidgetContainer>
       <BookmarkWidgetHeader />
@@ -233,8 +234,8 @@ export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDel
             <ButtonPlus>+</ButtonPlus>
           </ButtonContent>
         </BookmarkPreviewTitleBar>
-        <BookmarkPagePreviewLink href={url}>
-          {id === '' || isDeleted ? (
+        <BookmarkPagePreviewLink href={url} onClick={() => setIsUrlOpening(false)}>
+          {id === '' || isDeleted || isUrlOpening ? (
             <BookmarkPagePreviewSpinnerContainer>
               <SmallSpinner />
             </BookmarkPagePreviewSpinnerContainer>

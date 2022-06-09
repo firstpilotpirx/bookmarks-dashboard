@@ -9,6 +9,7 @@ import { PageIconMakerGoogleS2FaviconAxiosService } from '../secondary-adapters/
 import { BookmarkFactoryService } from '../core/bookmark/services/bookmark-factory.service';
 import { UuidUuidjsService } from '../secondary-adapters/uuidjs/uuid.uuidjs.service';
 import { DeleteOneBookmarkUseCase } from '../core/bookmark/use-cases/delete-one-bookmark.use-case';
+import { GridPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-position';
 
 export class ServerParam {
   constructor(public readonly host: string, public readonly port: number) {}
@@ -32,9 +33,10 @@ export class FastifyServerService {
     const deleteOneBookmarkUseCase = new DeleteOneBookmarkUseCase(bookmarkRepository);
 
     this.server.post('/bookmark', async (request, _reply) => {
+      const position = (request.body as { position: GridPosition }).position;
       const url = (request.body as { url: string }).url;
       const name = (request.body as { name: string }).name;
-      await createBookmarkUseCase.execute(url, name);
+      await createBookmarkUseCase.execute(position, url, name);
       return { result: 'ok' };
     });
 

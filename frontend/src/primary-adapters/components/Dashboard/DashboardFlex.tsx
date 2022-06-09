@@ -1,10 +1,10 @@
 import styled from 'styled-components';
+import { Bookmark } from '@bookmarks-dashboard/domain/dist/bookmark/entities/bookmark';
 import { CreateBookmarkControl } from '../CreateBookmarkControl/CreateBookmarkControl';
-import { Bookmark } from '../../../core/bookmark/entitties/bookmark';
 import { BookmarkWidget } from '../BookmarkWidget/BookmarkWidget';
 import { CreateBookmarkWidget } from '../CreateBookmarkWidget/CreateBookmarkWidget';
 
-const DashboardContainer = styled.div`
+const DashboardFlexContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
@@ -14,14 +14,14 @@ const DashboardContainer = styled.div`
   margin-top: 20px;
 `;
 
-export interface DashboardProps {
+export interface DashboardFlexProps {
   bookmarks: Bookmark[];
   onClickCreateBookmark: (url: string, name: string) => void;
   onDeleteBookmarkClick: (id: string) => void;
 }
 
-export const Dashboard = ({ bookmarks, onClickCreateBookmark, onDeleteBookmarkClick }: DashboardProps): JSX.Element => (
-  <DashboardContainer>
+export const DashboardFlex = ({ bookmarks, onClickCreateBookmark, onDeleteBookmarkClick }: DashboardFlexProps): JSX.Element => (
+  <DashboardFlexContainer>
     {bookmarks.map((bookmark) => (
       <BookmarkWidget
         key={bookmark.id}
@@ -36,5 +36,5 @@ export const Dashboard = ({ bookmarks, onClickCreateBookmark, onDeleteBookmarkCl
     <CreateBookmarkWidget>
       <CreateBookmarkControl onClickCreateBookmark={onClickCreateBookmark} />
     </CreateBookmarkWidget>
-  </DashboardContainer>
+  </DashboardFlexContainer>
 );
