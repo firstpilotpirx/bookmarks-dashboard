@@ -20,7 +20,7 @@ export class Grid {
         this.grid.push(row);
       }
     } else {
-      this.loadFromState(size);
+      this.setState(size);
     }
   }
 
@@ -72,7 +72,7 @@ export class Grid {
     };
   }
 
-  loadFromState(state: GridState): void {
+  private setState(state: GridState): void {
     this.name = state.name;
     this.size = new GridSize(state.size);
     this.grid = state.grid.map((row) => row.map((itemState) => (itemState === undefined ? undefined : new Bookmark(itemState))));

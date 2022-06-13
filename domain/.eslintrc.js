@@ -18,5 +18,6 @@ module.exports = {
     semi: ['error', 'always'],
     'max-len': ['warn', { code: 140 }],
     'no-console': 'WARN',
+    '@typescript-eslint/ban-ts-comment': 'WARN',
   },
 };

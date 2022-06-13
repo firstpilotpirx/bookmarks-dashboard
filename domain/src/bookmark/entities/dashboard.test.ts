@@ -40,13 +40,10 @@ describe('Unit Test Dashboard', () => {
 
     const allGrids = dashboard.getAllGrids();
     expect(allGrids.length).toEqual(3);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(allGrids[0].name).toEqual('0');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(allGrids[1].name).toEqual('1');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(allGrids[2].name).toEqual('2');
   });
@@ -57,13 +54,10 @@ describe('Unit Test Dashboard', () => {
     dashboard.createGrid();
     dashboard.createGrid();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(dashboard.getGrid(0).name).toEqual('0');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(dashboard.getGrid(1).name).toEqual('1');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(dashboard.getGrid(2).name).toEqual('2');
   });
@@ -83,10 +77,8 @@ describe('Unit Test Dashboard', () => {
 
     const allGrids = dashboard.getAllGrids();
     expect(allGrids.length).toEqual(2);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(allGrids[0].name).toEqual('0');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(allGrids[1].name).toEqual('2');
   });
@@ -95,6 +87,91 @@ describe('Unit Test Dashboard', () => {
     const dashboard = new Dashboard();
 
     expect(() => dashboard.deleteGrid(0)).toThrow();
+  });
+
+  test('should get state', async () => {
+    const dashboard = new Dashboard(new GridSize(1, 2));
+    dashboard.createGrid();
+    dashboard.createGrid();
+    dashboard.createGrid();
+
+    expect(dashboard.getState()).toEqual({
+      defaultGridSize: {
+        rowCount: 1,
+        columnCount: 2,
+      },
+      grids: [
+        {
+          name: '0',
+          size: {
+            columnCount: 2,
+            rowCount: 1,
+          },
+          grid: [[undefined, undefined]],
+        },
+        {
+          name: '1',
+          size: {
+            columnCount: 2,
+            rowCount: 1,
+          },
+          grid: [[undefined, undefined]],
+        },
+        {
+          name: '2',
+          size: {
+            columnCount: 2,
+            rowCount: 1,
+          },
+          grid: [[undefined, undefined]],
+        },
+      ],
+    });
+  });
+
+  test('should load from state', async () => {
+    const state = {
+      defaultGridSize: {
+        rowCount: 1,
+        columnCount: 2,
+      },
+      grids: [
+        {
+          name: '0',
+          size: {
+            columnCount: 2,
+            rowCount: 1,
+          },
+          grid: [[undefined, undefined]],
+        },
+        {
+          name: '1',
+          size: {
+            columnCount: 2,
+            rowCount: 1,
+          },
+          grid: [[undefined, undefined]],
+        },
+        {
+          name: '2',
+          size: {
+            columnCount: 2,
+            rowCount: 1,
+          },
+          grid: [[undefined, undefined]],
+        },
+      ],
+    };
+    const dashboard = new Dashboard(state);
+
+    const allGrids = dashboard.getAllGrids();
+    expect(allGrids.length).toEqual(3);
+    // @ts-ignore
+    expect(allGrids[0].name).toEqual('0');
+    // @ts-ignore
+    expect(allGrids[1].name).toEqual('1');
+    // @ts-ignore
+    expect(allGrids[2].name).toEqual('2');
   });
 
   // xtest('test', async () => {

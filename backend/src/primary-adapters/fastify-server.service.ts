@@ -1,15 +1,17 @@
 import fastify from 'fastify';
 import generated from '@fastify/cors';
-import { BookmarkJsonRepository } from '../secondary-adapters/json/bookmark.json.repository';
-import { CreateNewBookmarkUseCase } from '../core/bookmark/use-cases/create-new-bookmark.use-case';
+import { DashboardJsonRepository } from '../secondary-adapters/json/dashboard.json.repository';
+import { SetNewBookmarkUseCase } from '../core/bookmark/use-cases/set-new-bookmark.use-case';
 import { Base64ResizerSharpService } from '../secondary-adapters/sharp/base64-resizer.sharp.service';
-import { ReadAllBookmarksUseCase } from '../core/bookmark/use-cases/read-all-bookmarks.use-case';
+import { ReadDashboardUseCase } from '../core/bookmark/use-cases/read-dashboard.use-case';
 import { PagePreviewMakerPlaywrightService } from '../secondary-adapters/playwright/page-preview-maker.playwright.service';
 import { PageIconMakerGoogleS2FaviconAxiosService } from '../secondary-adapters/axios/page-icon-maker-google-s2-favicon.axios.service';
 import { BookmarkFactoryService } from '../core/bookmark/services/bookmark-factory.service';
 import { UuidUuidjsService } from '../secondary-adapters/uuidjs/uuid.uuidjs.service';
 import { DeleteOneBookmarkUseCase } from '../core/bookmark/use-cases/delete-one-bookmark.use-case';
 import { GridPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-position';
+import { CreateNewGridUseCase } from '../core/bookmark/use-cases/create-new-grid.use-case';
+import { DeleteOneGridUseCase } from '../core/bookmark/use-cases/delete-one-grid.use-case';
 
 export class ServerParam {
   constructor(public readonly host: string, public readonly port: number) {}
@@ -17,48 +19,74 @@ export class ServerParam {
 export class FastifyServerService {
   private readonly server = fastify({ logger: true });
 
+  private bookmarkRepository = new DashboardJsonRepository();
+
+  private uuidService = new UuidUuidjsService();
+  private pageIconMakerService = new PageIconMakerGoogleS2FaviconAxiosService();
+  private pagePreviewMaker = new PagePreviewMakerPlaywrightService(1600, 800);
+  private base64Resizer = new Base64ResizerSharpService();
+  private bookmarkFactoryService = new BookmarkFactoryService(
+    this.uuidService,
+    this.pageIconMakerService,
+    this.pagePreviewMaker,
+    this.base64Resizer,
+  );
+
+  private setNewBookmarkUseCase = new SetNewBookmarkUseCase(this.bookmarkFactoryService, this.bookmarkRepository);
+  private readDashboardUseCase = new ReadDashboardUseCase(this.bookmarkRepository);
+  private deleteOneBookmarkUseCase = new DeleteOneBookmarkUseCase(this.bookmarkRepository);
+  private createNewGridUseCase = new CreateNewGridUseCase(this.bookmarkRepository);
+  private deleteOneGridUseCase = new DeleteOneGridUseCase(this.bookmarkRepository);
+
   constructor(private port: number = 3334) {
     this.server.register(generated, { origin: true });
 
-    const bookmarkRepository = new BookmarkJsonRepository();
+    this.readDashboard();
 
-    const uuidService = new UuidUuidjsService();
-    const pageIconMakerService = new PageIconMakerGoogleS2FaviconAxiosService();
-    const pagePreviewMaker = new PagePreviewMakerPlaywrightService(1600, 800);
-    const base64Resizer = new Base64ResizerSharpService();
-    const bookmarkFactoryService = new BookmarkFactoryService(uuidService, pageIconMakerService, pagePreviewMaker, base64Resizer);
+    this.createNewGrid();
+    this.deleteOneGrid();
 
-    const createBookmarkUseCase = new CreateNewBookmarkUseCase(bookmarkFactoryService, bookmarkRepository);
-    const readAllBookmarksUseCase = new ReadAllBookmarksUseCase(bookmarkRepository);
-    const deleteOneBookmarkUseCase = new DeleteOneBookmarkUseCase(bookmarkRepository);
+    this.setNewBookmark();
+    this.deleteBookmark();
+  }
 
-    this.server.post('/bookmark', async (request, _reply) => {
-      const position = (request.body as { position: GridPosition }).position;
-      const url = (request.body as { url: string }).url;
-      const name = (request.body as { name: string }).name;
-      await createBookmarkUseCase.execute(position, url, name);
+  private readDashboard(): void {
+    this.server.get('/dashboard', async (_request, _reply) => {
+      const dashboard = await this.readDashboardUseCase.execute();
+      return dashboard.getState();
+    });
+  }
+
+  private createNewGrid(): void {
+    this.server.post('/dashboard/grid', async (_request, _reply) => {
+      await this.createNewGridUseCase.execute();
       return { result: 'ok' };
     });
+  }
 
-    this.server.delete('/bookmark/:id', async (request, _reply) => {
-      const id = (request.params as { id: string }).id;
-      await deleteOneBookmarkUseCase.execute(id);
-
+  private deleteOneGrid(): void {
+    this.server.delete('/dashboard/grid/:gridIndex', async (request, _reply) => {
+      const params = request.params as { gridIndex: number };
+      await this.deleteOneGridUseCase.execute(Number(params.gridIndex));
       return { result: 'ok' };
     });
+  }
 
-    this.server.get('/bookmark', async (_request, _reply) => {
-      return readAllBookmarksUseCase.execute();
+  private setNewBookmark(): void {
+    this.server.post('/dashboard/grid/:gridIndex/row/:row/column/:column', async (request, _reply) => {
+      const params = request.params as { gridIndex: number; row: number; column: number };
+      const body = request.body as { url: string; name: string };
+      await this.setNewBookmarkUseCase.execute(params.gridIndex, new GridPosition(params.row, params.column), body.url, body.name);
+      return { result: 'ok' };
     });
+  }
 
-    /*
-    curl -X POST http://localhost:3334/bookmark -H 'Content-Type: application/json' -d '{"url":"https://www.youtube.com","name":"my name"}'
-*/
-    // this.server.post('/screenshot/base64', async (request, _reply) => {
-    //   const screenshotMaker = new PagePreviewMakerPlaywrightService();
-    //   const screenshot = await screenshotMaker.takeBase64((request.body as { url: string }).url);
-    //   return { base64: screenshot };
-    // });
+  private deleteBookmark(): void {
+    this.server.delete('/dashboard/grid/:gridIndex/row/:row/column/:column', async (request, _reply) => {
+      const params = request.params as { gridIndex: number; row: number; column: number };
+      await this.deleteOneBookmarkUseCase.execute(params.gridIndex, new GridPosition(params.row, params.column));
+      return { result: 'ok' };
+    });
   }
 
   async start(): Promise<ServerParam> {

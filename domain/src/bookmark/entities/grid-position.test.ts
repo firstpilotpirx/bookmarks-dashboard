@@ -26,4 +26,23 @@ describe('Unit Test GridPosition', () => {
   test('should not create with negative row and column', async () => {
     expect(() => new GridPosition(-1, -1)).toThrow();
   });
+
+  test('should create from state', async () => {
+    const position = new GridPosition({
+      row: 5,
+      column: 7,
+    });
+
+    expect(position.row).toEqual(5);
+    expect(position.column).toEqual(7);
+  });
+
+  test('should get state', async () => {
+    const position = new GridPosition(5, 7);
+
+    expect(position.getState()).toEqual({
+      row: 5,
+      column: 7,
+    });
+  });
 });

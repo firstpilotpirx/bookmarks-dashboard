@@ -1,1 +1,0 @@
-{"version":3,"file":"bookmark-with-position.d.ts","sourceRoot":"","sources":["../../../src/bookmark/entities/bookmark-with-position.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,iBAAiB,CAAC;AAC/C,OAAO,EAAE,QAAQ,EAAE,MAAM,YAAY,CAAC;AAEtC,qBAAa,oBAAoB;IACZ,QAAQ,EAAE,YAAY;IAAS,QAAQ,EAAE,QAAQ;gBAAjD,QAAQ,EAAE,YAAY,EAAS,QAAQ,EAAE,QAAQ;CACrE"}
