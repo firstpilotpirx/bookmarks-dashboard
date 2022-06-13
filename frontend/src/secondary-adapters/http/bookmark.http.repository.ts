@@ -5,8 +5,9 @@ import { Bookmark } from '@bookmarks-dashboard/domain/dist/bookmark/entities/boo
 import { BookmarkRepository } from '../../core/bookmark/repositories/bookmark.repository';
 
 export class BookmarkHttpRepository implements BookmarkRepository {
-  async createOne(url: string, name: string): Promise<void> {
+  async createOne(position: GridPosition, url: string, name: string): Promise<void> {
     await axios.post('http://localhost:3334/bookmark', {
+      position,
       url,
       name,
     });
@@ -22,8 +23,8 @@ export class BookmarkHttpRepository implements BookmarkRepository {
             bookmarkWithPosition.bookmark.id,
             bookmarkWithPosition.bookmark.url,
             bookmarkWithPosition.bookmark.name,
-            bookmarkWithPosition.bookmark.previewBase64,
             bookmarkWithPosition.bookmark.iconBase64,
+            bookmarkWithPosition.bookmark.previewBase64,
           ),
         ),
     );

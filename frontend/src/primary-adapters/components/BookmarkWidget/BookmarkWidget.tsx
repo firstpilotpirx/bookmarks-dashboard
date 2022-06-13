@@ -2,46 +2,17 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { SmallSpinner } from '../SmallSpinner/SmallSpinner';
 
-const height = 9 * 15;
-const width = 16 * 15;
-
 const BookmarkWidgetContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: top;
-  align-item: center;
-
-  height: ${height}px;
-  // width: ${width}px;
-  width: 100%;
-
-  margin-left: 10px;
-  margin-top: 10px;
   margin: 0;
-`;
+  padding: 0;
 
-const BookmarkWidgetHeader = styled.div`
-  text-align: center;
-  font-size: 0.7em;
-`;
-
-const BookmarkWidgetBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-item: center;
-
-  height: ${height}px;
-  // width: ${width}px;
+  height: 100%;
   width: 100%;
 
   background-color: rgba(255, 255, 255, 0.45);
-  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  // border: 0px solid black;
   border-radius: 7px;
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.9);
-  // backdrop-filter: blur(15px);
 
   color: white;
   text-transform: uppercase;
@@ -59,8 +30,7 @@ const BookmarkPreviewTitleBar = styled.div`
 
   padding-left: 0.4em;
   padding-right: 0.4em;
-  height: 15%;
-  background-color: #fafafa;
+  height: 1.6em;
   background-color: #000000;
 
   overflow: hidden;
@@ -71,9 +41,19 @@ const RoundButtonSize = 0.6;
 const ButtonRed = styled.div`
   width: ${RoundButtonSize}em;
   height: ${RoundButtonSize}em;
+  width: 10px;
+  height: 10px;
+  font-size: 0.8em;
+  text-align: center;
+  color: black;
+
   border-radius: 50%;
 
   background-color: #fe5f58;
+
+  &:hover {
+    background-color: #ff190dff;
+  }
 `;
 
 const ButtonYellow = styled.div`
@@ -82,6 +62,10 @@ const ButtonYellow = styled.div`
   border-radius: 50%;
 
   background-color: #febc30;
+
+  &:hover {
+    background-color: #fff900ff;
+  }
 `;
 
 const ButtonGreen = styled.div`
@@ -90,6 +74,10 @@ const ButtonGreen = styled.div`
   border-radius: 50%;
 
   background-color: #24c840;
+
+  &:hover {
+    background-color: #00ff2d;
+  }
 `;
 
 const ButtonTransparent = styled.div`
@@ -119,12 +107,8 @@ export interface BookmarkPreviewProps {
 const BookmarkPagePreviewLink = styled.a`
   display: inline-block;
 
-  // display: flex;
-  //
-  // justify-content: center;
-  // align-items: stretch;
-
-  height: 85%;
+  height: 100%;
+  width: 100%;
 `;
 
 const BookmarkPagePreviewSpinnerContainer = styled.a`
@@ -138,8 +122,15 @@ const BookmarkPagePreviewSpinnerContainer = styled.a`
 
 const BookmarkPagePreview = styled.div<BookmarkPreviewProps>`
   height: 100%;
+  width: 100%;
+
+  background-origin: border-box;
   background-image: url('data:image/png;base64, ${(props) => props.previewBase64}');
-  background-size: 100%;
+
+  background-size: 100% auto;
+  background-position: top;
+
+  background-repeat: no-repeat;
 
   overflow: hidden;
 `;
@@ -149,15 +140,13 @@ export interface IcoProps {
 }
 
 const Ico = styled.div<IcoProps>`
-  margin: 0px;
+  margin: 0;
 
   height: 0.7em;
   width: 0.7em;
 
   background-image: url('data:image/png;base64, ${(props) => props.iconBase64}');
   background-repeat: no-repeat;
-
-  background-size: cover;
   background-size: 100%;
 `;
 
@@ -209,41 +198,38 @@ export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDel
 
   return (
     <BookmarkWidgetContainer>
-      <BookmarkWidgetHeader />
-      <BookmarkWidgetBody>
-        <BookmarkPreviewTitleBar>
-          <ButtonContent>
-            <ButtonRed
-              onClick={() => {
-                setIsDeleted(true);
-                onDeleteBookmarkClick(id);
-              }}
-            />
-            <ButtonYellow />
-            <ButtonGreen />
-          </ButtonContent>
-          <AddressBar>
-            <Ico iconBase64={iconBase64} />
-            <AddressContainer>
-              <Address>{name.slice(0, 20)}</Address>
-            </AddressContainer>
-          </AddressBar>
-          <ButtonContent>
-            <ButtonTransparent />
-            <ButtonTransparent />
-            <ButtonPlus>+</ButtonPlus>
-          </ButtonContent>
-        </BookmarkPreviewTitleBar>
-        <BookmarkPagePreviewLink href={url} onClick={() => setIsUrlOpening(false)}>
-          {id === '' || isDeleted || isUrlOpening ? (
-            <BookmarkPagePreviewSpinnerContainer>
-              <SmallSpinner />
-            </BookmarkPagePreviewSpinnerContainer>
-          ) : (
-            <BookmarkPagePreview previewBase64={previewBase64} />
-          )}
-        </BookmarkPagePreviewLink>
-      </BookmarkWidgetBody>
+      <BookmarkPreviewTitleBar>
+        <ButtonContent>
+          <ButtonRed
+            onClick={() => {
+              setIsDeleted(true);
+              onDeleteBookmarkClick(id);
+            }}
+          />
+          <ButtonYellow />
+          <ButtonGreen />
+        </ButtonContent>
+        <AddressBar>
+          <Ico iconBase64={iconBase64} />
+          <AddressContainer>
+            <Address>{name.slice(0, 20)}</Address>
+          </AddressContainer>
+        </AddressBar>
+        <ButtonContent>
+          <ButtonTransparent />
+          <ButtonTransparent />
+          <ButtonPlus>+</ButtonPlus>
+        </ButtonContent>
+      </BookmarkPreviewTitleBar>
+      <BookmarkPagePreviewLink href={url} onClick={() => setIsUrlOpening(false)}>
+        {id === '' || isDeleted || isUrlOpening ? (
+          <BookmarkPagePreviewSpinnerContainer>
+            <SmallSpinner />
+          </BookmarkPagePreviewSpinnerContainer>
+        ) : (
+          <BookmarkPagePreview previewBase64={previewBase64} />
+        )}
+      </BookmarkPagePreviewLink>
     </BookmarkWidgetContainer>
   );
 };

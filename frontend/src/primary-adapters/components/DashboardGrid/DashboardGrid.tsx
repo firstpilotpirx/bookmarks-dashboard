@@ -1,6 +1,8 @@
 import styled from 'styled-components';
-import { BookmarkWithPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/bookmark-with-position';
+import { GridBookmark } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-bookmark';
+import { GridPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-position';
 import { BookmarkWidget } from '../BookmarkWidget/BookmarkWidget';
+import { SetBookmarkWidget } from '../SetBookmarkWidget/SetBookmarkWidget';
 
 interface DashboardGridContainerProps {
   columnsCount: number;
@@ -10,10 +12,10 @@ interface DashboardGridContainerProps {
 const DashboardGridContainer = styled.div<DashboardGridContainerProps>`
   display: grid;
 
-  margin-left: 20px;
-  margin-top: 20px;
+  width: calc(100% - 40px);
+  height: fit-content;
 
-  grid-template-columns: repeat(${(props) => props.columnsCount}, 300px);
+  grid-template-columns: repeat(${(props) => props.columnsCount}, 1fr);
   grid-template-rows: repeat(${(props) => props.rowsCount}, auto);
 
   column-gap: 20px;
@@ -23,11 +25,13 @@ const DashboardGridContainer = styled.div<DashboardGridContainerProps>`
 interface DashboardGridItemProps {
   columnPosition: number;
   rowsPosition: number;
-  backgroundColor: string;
 }
 
 const DashboardGridItem = styled.div<DashboardGridItemProps>`
-  background-color: ${(props) => props.backgroundColor};
+  width: 100%;
+  height: auto;
+
+  aspect-ratio: 16 / 8;
 
   grid-column-start: ${(props) => props.columnPosition};
   grid-column-end: ${(props) => props.columnPosition};
@@ -37,42 +41,46 @@ const DashboardGridItem = styled.div<DashboardGridItemProps>`
 `;
 
 export interface DashboardGridProps {
-  bookmarks: BookmarkWithPosition[];
-  onClickCreateBookmark: (url: string, name: string) => void;
+  gridBookmark: GridBookmark;
+  onClickSetBookmark: (position: GridPosition, url: string, name: string) => void;
   onDeleteBookmarkClick: (id: string) => void;
 }
 
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const DashboardGrid = ({ bookmarks, onClickCreateBookmark, onDeleteBookmarkClick }: DashboardGridProps): JSX.Element => (
-  <DashboardGridContainer columnsCount={16} rowsCount={10}>
-    {bookmarks.map((bookmarkWithPosition) => (
-      // console.log((index % 5) + 1, Math.floor(index / 5) + 1);
-      <DashboardGridItem
-        columnPosition={bookmarkWithPosition.position.column}
-        rowsPosition={bookmarkWithPosition.position.row}
-        backgroundColor="red"
-      >
-        <BookmarkWidget
-          key={bookmarkWithPosition.bookmark.id}
-          id={bookmarkWithPosition.bookmark.id}
-          url={bookmarkWithPosition.bookmark.url}
-          name={bookmarkWithPosition.bookmark.name}
-          iconBase64={bookmarkWithPosition.bookmark.iconBase64}
-          previewBase64={bookmarkWithPosition.bookmark.previewBase64}
-          onDeleteBookmarkClick={onDeleteBookmarkClick}
-        />
-      </DashboardGridItem>
-    ))}
-    {/* <DashboardGridItem columnPosition={1} rowsPosition={1} backgroundColor="red" /> */}
-    {/* <DashboardGridItem columnPosition={2} rowsPosition={1} backgroundColor="green" /> */}
-    {/* <DashboardGridItem columnPosition={3} rowsPosition={1} backgroundColor="blue" /> */}
-    {/* <DashboardGridItem columnPosition={4} rowsPosition={1} backgroundColor="gray" /> */}
-    {/* <DashboardGridItem columnPosition={6} rowsPosition={1} backgroundColor="purple" /> */}
-    {/* <DashboardGridItem columnPosition={1} rowsPosition={2} backgroundColor="green" /> */}
-    {/* <DashboardGridItem columnPosition={2} rowsPosition={2} backgroundColor="blue" /> */}
-    {/* <DashboardGridItem columnPosition={3} rowsPosition={2} backgroundColor="black" /> */}
-    {/* <DashboardGridItem columnPosition={7} rowsPosition={2} backgroundColor="white" /> */}
-    {/* <DashboardGridItem columnPosition={8} rowsPosition={2} backgroundColor="orange" /> */}
-  </DashboardGridContainer>
-);
+export const DashboardGrid = ({ gridBookmark, onClickSetBookmark, onDeleteBookmarkClick }: DashboardGridProps): JSX.Element => {
+  const dashboardGridItemSet = [];
+  const rowsCount = 7;
+  const columnsCount = 6;
+  for (let rowIndex = 1; rowIndex <= rowsCount; rowIndex++) {
+    for (let columnIndex = 1; columnIndex <= columnsCount; columnIndex++) {
+      const position = new GridPosition(rowIndex, columnIndex);
+      const bookmark = gridBookmark.getBookmark(position);
+      if (bookmark === undefined) {
+        dashboardGridItemSet.push(
+          <DashboardGridItem columnPosition={columnIndex} rowsPosition={rowIndex}>
+            <SetBookmarkWidget position={position} onClickSetBookmark={onClickSetBookmark} />
+          </DashboardGridItem>,
+        );
+      } else {
+        dashboardGridItemSet.push(
+          <DashboardGridItem columnPosition={columnIndex} rowsPosition={rowIndex}>
+            <BookmarkWidget
+              key={bookmark.id}
+              id={bookmark.id}
+              url={bookmark.url}
+              name={bookmark.name}
+              iconBase64={bookmark.iconBase64}
+              previewBase64={bookmark.previewBase64}
+              onDeleteBookmarkClick={onDeleteBookmarkClick}
+            />
+          </DashboardGridItem>,
+        );
+      }
+    }
+  }
+
+  return (
+    <DashboardGridContainer rowsCount={rowsCount} columnsCount={columnsCount}>
+      {dashboardGridItemSet}
+    </DashboardGridContainer>
+  );
+};

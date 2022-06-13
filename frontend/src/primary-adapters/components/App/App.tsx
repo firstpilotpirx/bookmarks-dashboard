@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { BookmarkWithPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/bookmark-with-position';
-import { CreateNewBookmarkUseCase } from '../../../core/bookmark/use-cases/create-new-bookmark.use-case';
+import styled from 'styled-components';
+import { GridBookmark } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-bookmark';
+import { GridPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-position';
+import { SetNewBookmarkUseCase } from '../../../core/bookmark/use-cases/set-new-bookmark-use.case';
 import { BookmarkHttpRepository } from '../../../secondary-adapters/http/bookmark.http.repository';
 import { ReadAllBookmarksUseCase } from '../../../core/bookmark/use-cases/read-all-bookmarks.use-case';
 import { DeleteOneBookmarkUseCase } from '../../../core/bookmark/use-cases/delete-one-bookmark.use-case';
@@ -8,12 +10,20 @@ import { FullScreenSpinner } from '../FullScreenSpinner/FullScreenSpinner';
 import { DashboardGrid } from '../DashboardGrid/DashboardGrid';
 
 const bookmarkRepository = new BookmarkHttpRepository();
-const createNewBookmarkUseCase = new CreateNewBookmarkUseCase(bookmarkRepository);
+const setNewBookmarkUseCase = new SetNewBookmarkUseCase(bookmarkRepository);
 const readAllBookmarksUseCase = new ReadAllBookmarksUseCase(bookmarkRepository);
 const deleteOneBookmarkUseCase = new DeleteOneBookmarkUseCase(bookmarkRepository);
 
+const AppContent = styled.div`
+  width: 100%;
+  height: 100%;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+`;
+
 const App = (): JSX.Element => {
-  const [bookmarks, setBookmarks] = useState<BookmarkWithPosition[]>([]);
+  const [gridBookmark, setGridBookmark] = useState<GridBookmark>(new GridBookmark(1, 1));
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const init = async (): Promise<void> => {
@@ -24,7 +34,7 @@ const App = (): JSX.Element => {
       console.log('>>>>>>>>> light');
     }
 
-    setBookmarks([...(await readAllBookmarksUseCase.execute())]);
+    setGridBookmark(await readAllBookmarksUseCase.execute());
     setIsLoading(false);
   };
 
@@ -42,35 +52,24 @@ const App = (): JSX.Element => {
   });
 
   return (
-    <div>
-      <DashboardGrid
-        bookmarks={bookmarks}
-        onClickCreateBookmark={async (url: string, name: string) => {
-          // setBookmarks([...bookmarks, new Bookmark('', url, name, '', '')]);
-          await createNewBookmarkUseCase.execute(url, name);
-          setBookmarks([...(await readAllBookmarksUseCase.execute())]);
-        }}
-        onDeleteBookmarkClick={async (id: string) => {
-          await deleteOneBookmarkUseCase.execute(id);
-          setBookmarks([...(await readAllBookmarksUseCase.execute())]);
-        }}
-      />
-      {isLoading ? <FullScreenSpinner /> : null}
-      {/* {!isLoading ? ( */}
-      {/*  <DashboardFlex */}
-      {/*    bookmarks={bookmarks} */}
-      {/*    onClickCreateBookmark={async (url: string, name: string) => { */}
-      {/*      // setBookmarks([...bookmarks, new Bookmark('', url, name, '', '')]); */}
-      {/*      await createNewBookmarkUseCase.execute(url, name); */}
-      {/*      setBookmarks([...(await readAllBookmarksUseCase.execute())]); */}
-      {/*    }} */}
-      {/*    onDeleteBookmarkClick={async (id: string) => { */}
-      {/*      await deleteOneBookmarkUseCase.execute(id); */}
-      {/*      setBookmarks([...(await readAllBookmarksUseCase.execute())]); */}
-      {/*    }} */}
-      {/*  /> */}
-      {/* ) : null} */}
-    </div>
+    <AppContent>
+      {isLoading ? (
+        <FullScreenSpinner />
+      ) : (
+        <DashboardGrid
+          gridBookmark={gridBookmark}
+          onClickSetBookmark={async (position: GridPosition, url: string, name: string) => {
+            // setBookmarks([...bookmarks, new Bookmark('', url, name, '', '')]);
+            await setNewBookmarkUseCase.execute(position, url, name);
+            setGridBookmark(await readAllBookmarksUseCase.execute());
+          }}
+          onDeleteBookmarkClick={async (id: string) => {
+            await deleteOneBookmarkUseCase.execute(id);
+            setGridBookmark(await readAllBookmarksUseCase.execute());
+          }}
+        />
+      )}
+    </AppContent>
   );
 };
 
