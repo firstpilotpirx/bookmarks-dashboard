@@ -54,6 +54,7 @@ module.exports = {
         },
       },
     ],
+    'function-paren-newline': 'warn',
     'no-restricted-syntax': 'warn',
     'no-await-in-loop': 'warn',
     '@typescript-eslint/restrict-template-expressions': ['off'],

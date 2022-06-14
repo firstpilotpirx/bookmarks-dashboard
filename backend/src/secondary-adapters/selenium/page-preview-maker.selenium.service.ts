@@ -30,9 +30,6 @@ export class PagePreviewMakerSeleniumService implements PagePreviewMaker {
     await driver.manage().window().maximize();
 
     const screenshot = await driver.takeScreenshot();
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-    console.log(screenshot);
-    console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
     return screenshot;
   }
 }

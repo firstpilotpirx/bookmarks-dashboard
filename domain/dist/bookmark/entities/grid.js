@@ -60,7 +60,7 @@ class Grid {
     setState(state) {
         this.name = state.name;
         this.size = new grid_size_1.GridSize(state.size);
-        this.grid = state.grid.map((row) => row.map((itemState) => (itemState === undefined ? undefined : new bookmark_1.Bookmark(itemState))));
+        this.grid = state.grid.map((row) => row.map((itemState) => (itemState === undefined || itemState === null ? undefined : new bookmark_1.Bookmark(itemState))));
     }
 }
 exports.Grid = Grid;

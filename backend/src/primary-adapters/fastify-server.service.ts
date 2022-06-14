@@ -73,7 +73,7 @@ export class FastifyServerService {
   }
 
   private setNewBookmark(): void {
-    this.server.post('/dashboard/grid/:gridIndex/row/:row/column/:column', async (request, _reply) => {
+    this.server.put('/dashboard/grid/:gridIndex/row/:row/column/:column', async (request, _reply) => {
       const params = request.params as { gridIndex: number; row: number; column: number };
       const body = request.body as { url: string; name: string };
       await this.setNewBookmarkUseCase.execute(params.gridIndex, new GridPosition(params.row, params.column), body.url, body.name);

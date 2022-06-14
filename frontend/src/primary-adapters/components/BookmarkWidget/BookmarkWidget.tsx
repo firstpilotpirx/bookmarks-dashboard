@@ -189,12 +189,12 @@ export interface BookmarkWidgetProps {
   name: string;
   iconBase64: string;
   previewBase64?: string;
-  onDeleteBookmarkClick: (id: string) => void;
+  onClickDeleteBookmark: () => void;
 }
 
-export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDeleteBookmarkClick }: BookmarkWidgetProps): JSX.Element => {
+export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onClickDeleteBookmark }: BookmarkWidgetProps): JSX.Element => {
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
-  const [isUrlOpening, setIsUrlOpening] = useState<boolean>(false); // TODO set spinner on full screen
+  const [isUrlOpening, setIsUrlOpening] = useState<boolean>(false);
 
   return (
     <BookmarkWidgetContainer>
@@ -203,7 +203,7 @@ export const BookmarkWidget = ({ id, url, name, iconBase64, previewBase64, onDel
           <ButtonRed
             onClick={() => {
               setIsDeleted(true);
-              onDeleteBookmarkClick(id);
+              onClickDeleteBookmark();
             }}
           />
           <ButtonYellow />

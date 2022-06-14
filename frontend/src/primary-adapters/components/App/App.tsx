@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { GridBookmark } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-bookmark';
 import { GridPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-position';
+import { Dashboard } from '@bookmarks-dashboard/domain/dist/bookmark/entities/dashboard';
 import { SetNewBookmarkUseCase } from '../../../core/bookmark/use-cases/set-new-bookmark-use.case';
-import { BookmarkHttpRepository } from '../../../secondary-adapters/http/bookmark.http.repository';
-import { ReadAllBookmarksUseCase } from '../../../core/bookmark/use-cases/read-all-bookmarks.use-case';
-import { DeleteOneBookmarkUseCase } from '../../../core/bookmark/use-cases/delete-one-bookmark.use-case';
+import { DashboardHttpRepository } from '../../../secondary-adapters/http/dashboard.http.repository';
+import { ReadDashboardUseCase } from '../../../core/bookmark/use-cases/read-dashboard.use-case';
+import { DeleteBookmarkUseCase } from '../../../core/bookmark/use-cases/delete-bookmark.use-case';
 import { FullScreenSpinner } from '../FullScreenSpinner/FullScreenSpinner';
-import { DashboardGrid } from '../DashboardGrid/DashboardGrid';
+import { GridWidget } from '../GridWidget/GridWidget';
 
-const bookmarkRepository = new BookmarkHttpRepository();
+const bookmarkRepository = new DashboardHttpRepository();
 const setNewBookmarkUseCase = new SetNewBookmarkUseCase(bookmarkRepository);
-const readAllBookmarksUseCase = new ReadAllBookmarksUseCase(bookmarkRepository);
-const deleteOneBookmarkUseCase = new DeleteOneBookmarkUseCase(bookmarkRepository);
+const readDashboardUseCase = new ReadDashboardUseCase(bookmarkRepository);
+const deleteOneBookmarkUseCase = new DeleteBookmarkUseCase(bookmarkRepository);
 
 const AppContent = styled.div`
   width: 100%;
@@ -23,18 +23,19 @@ const AppContent = styled.div`
 `;
 
 const App = (): JSX.Element => {
-  const [gridBookmark, setGridBookmark] = useState<GridBookmark>(new GridBookmark(1, 1));
+  const [dashboard, setDashboard] = useState<Dashboard>(new Dashboard());
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const init = async (): Promise<void> => {
-    const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
-    if (darkThemeMq.matches) {
-      console.log('>>>>>>>>> dark');
-    } else {
-      console.log('>>>>>>>>> light');
-    }
+    // TODO use for themes
+    // const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
+    // if (darkThemeMq.matches) {
+    //   console.log('>>>>>>>>> dark');
+    // } else {
+    //   console.log('>>>>>>>>> light');
+    // }
 
-    setGridBookmark(await readAllBookmarksUseCase.execute());
+    setDashboard(await readDashboardUseCase.execute());
     setIsLoading(false);
   };
 
@@ -56,16 +57,17 @@ const App = (): JSX.Element => {
       {isLoading ? (
         <FullScreenSpinner />
       ) : (
-        <DashboardGrid
-          gridBookmark={gridBookmark}
+        <GridWidget
+          // @ts-ignore
+          grid={dashboard.getGrid(0)}
           onClickSetBookmark={async (position: GridPosition, url: string, name: string) => {
             // setBookmarks([...bookmarks, new Bookmark('', url, name, '', '')]);
-            await setNewBookmarkUseCase.execute(position, url, name);
-            setGridBookmark(await readAllBookmarksUseCase.execute());
+            await setNewBookmarkUseCase.execute(0, position, url, name);
+            setDashboard(await readDashboardUseCase.execute());
           }}
-          onDeleteBookmarkClick={async (id: string) => {
-            await deleteOneBookmarkUseCase.execute(id);
-            setGridBookmark(await readAllBookmarksUseCase.execute());
+          onClickDeleteBookmark={async (position: GridPosition) => {
+            await deleteOneBookmarkUseCase.execute(0, position);
+            setDashboard(await readDashboardUseCase.execute());
           }}
         />
       )}

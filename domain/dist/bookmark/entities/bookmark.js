@@ -4,13 +4,19 @@ exports.Bookmark = void 0;
 class Bookmark {
     state;
     constructor(id, url, name, iconBase64, previewBase64) {
-        if (url === undefined || name === undefined || iconBase64 === undefined || previewBase64 === undefined) {
+        if (url === undefined && name === undefined && iconBase64 === undefined && previewBase64 === undefined) {
             this.state = id;
             return;
         }
+        if (name === undefined) {
+            name = '';
+        }
+        if (url === undefined || iconBase64 === undefined || previewBase64 === undefined) {
+            throw new Error('url, name, iconBase64, previewBase64 should not be undefined');
+        }
         const hostname = new URL(url).hostname;
-        if (name === '') {
-            name = this.hostname;
+        if (name === '' || name === undefined || name === null) {
+            name = hostname;
         }
         this.state = {
             id: id,

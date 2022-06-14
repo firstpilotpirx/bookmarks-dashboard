@@ -29,6 +29,15 @@ describe('Unit Test Bookmark', () => {
         expect(bookmark.iconBase64).toEqual('icon');
         expect(bookmark.previewBase64).toEqual('preview');
     });
+    test('should create with empty name', async () => {
+        const bookmark = new bookmark_1.Bookmark('3c921a2e-c093-457a-9634-0ad11f298990', 'https://www.youtube.com', '', 'icon', 'preview');
+        expect(bookmark.id).toEqual('3c921a2e-c093-457a-9634-0ad11f298990');
+        expect(bookmark.url).toEqual('https://www.youtube.com');
+        expect(bookmark.hostname).toEqual('www.youtube.com');
+        expect(bookmark.name).toEqual('www.youtube.com');
+        expect(bookmark.iconBase64).toEqual('icon');
+        expect(bookmark.previewBase64).toEqual('preview');
+    });
     test('should get state', async () => {
         const bookmark = new bookmark_1.Bookmark('id', 'https://www.my-host.org:8080', 'name', 'icon', 'preview');
         const state = bookmark.getState();

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useRef, useState } from 'react';
-import { GridPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-position';
 import { SmallSpinner } from '../SmallSpinner/SmallSpinner';
 
 const SetBookmarkWidgetRootContainer = styled.div`
@@ -86,11 +85,10 @@ const BookmarkPagePreviewSpinnerContainer = styled.a`
 `;
 
 export interface SetBookmarkWidgetProps {
-  position: GridPosition;
-  onClickSetBookmark: (position: GridPosition, url: string, name: string) => void;
+  onClickSetBookmark: (url: string, name: string) => void;
 }
 
-export const SetBookmarkWidget = ({ position, onClickSetBookmark }: SetBookmarkWidgetProps): JSX.Element => {
+export const SetBookmarkWidget = ({ onClickSetBookmark }: SetBookmarkWidgetProps): JSX.Element => {
   const nameInput = useRef(null);
   const [urlValue, setUrlValue] = useState('');
   const [nameValue, setNameValue] = useState('');
@@ -106,7 +104,7 @@ export const SetBookmarkWidget = ({ position, onClickSetBookmark }: SetBookmarkW
   const handleNameKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'Enter') {
       setIsCreating(true);
-      onClickSetBookmark(position, urlValue, nameValue);
+      onClickSetBookmark(urlValue, nameValue);
     }
   };
 
@@ -136,7 +134,7 @@ export const SetBookmarkWidget = ({ position, onClickSetBookmark }: SetBookmarkW
           <CreateButton
             onClick={() => {
               setIsCreating(true);
-              onClickSetBookmark(position, urlValue, nameValue);
+              onClickSetBookmark(urlValue, nameValue);
             }}
           >
             Create

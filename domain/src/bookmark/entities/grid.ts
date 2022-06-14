@@ -75,6 +75,8 @@ export class Grid {
   private setState(state: GridState): void {
     this.name = state.name;
     this.size = new GridSize(state.size);
-    this.grid = state.grid.map((row) => row.map((itemState) => (itemState === undefined ? undefined : new Bookmark(itemState))));
+    this.grid = state.grid.map((row) =>
+      row.map((itemState) => (itemState === undefined || itemState === null ? undefined : new Bookmark(itemState))),
+    );
   }
 }
