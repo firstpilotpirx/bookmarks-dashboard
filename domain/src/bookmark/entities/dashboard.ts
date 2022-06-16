@@ -27,11 +27,13 @@ export class Dashboard {
   getAllGrids(): Grid[] {
     return this.grids;
   }
-  getGrid(gridIndex: number): Grid | undefined {
+
+  getGrid(gridIndex: number): Grid {
     if (gridIndex >= this.grids.length) {
       throw new Error('Out of range');
     }
 
+    // @ts-ignore
     return this.grids[gridIndex];
   }
 

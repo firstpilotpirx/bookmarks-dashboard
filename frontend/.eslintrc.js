@@ -54,6 +54,7 @@ module.exports = {
         },
       },
     ],
+    'operator-linebreak': 'warn',
     'function-paren-newline': 'warn',
     'no-restricted-syntax': 'warn',
     'no-await-in-loop': 'warn',

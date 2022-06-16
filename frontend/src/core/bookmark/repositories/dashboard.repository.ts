@@ -5,6 +5,7 @@ export interface DashboardRepository {
   readDashboard(): Promise<Dashboard>;
 
   createGrid(): Promise<void>;
+  changeGridName(gridIndex: number, newName: string): Promise<void>;
   deleteGrid(gridIndex: number): Promise<void>;
 
   setBookmark(gridIndex: number, position: GridPosition, url: string, name: string): Promise<void>;

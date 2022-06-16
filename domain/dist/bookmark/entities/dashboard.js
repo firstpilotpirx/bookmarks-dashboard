@@ -26,6 +26,7 @@ class Dashboard {
         if (gridIndex >= this.grids.length) {
             throw new Error('Out of range');
         }
+        // @ts-ignore
         return this.grids[gridIndex];
     }
     deleteGrid(gridIndex) {

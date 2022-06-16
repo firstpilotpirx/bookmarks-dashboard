@@ -11,7 +11,7 @@ export class DashboardHttpRepository implements DashboardRepository {
   }
 
   createGrid(): Promise<void> {
-    return axios.post('http://localhost:3334/dashboard/grid/');
+    return axios.post('http://localhost:3334/dashboard/grid');
   }
 
   deleteGrid(gridIndex: number): Promise<void> {
@@ -27,5 +27,11 @@ export class DashboardHttpRepository implements DashboardRepository {
 
   deleteBookmark(gridIndex: number, position: GridPosition): Promise<void> {
     return axios.delete(`http://localhost:3334/dashboard/grid/${gridIndex}/row/${position.row}/column/${position.column}`);
+  }
+
+  async changeGridName(gridIndex: number, newName: string): Promise<void> {
+    await axios.put(`http://localhost:3334/dashboard/grid/${gridIndex}/name`, {
+      newName,
+    });
   }
 }

@@ -12,14 +12,14 @@ interface DashboardGridContainerProps {
 const DashboardGridContainer = styled.div<DashboardGridContainerProps>`
   display: grid;
 
-  width: calc(100% - 40px);
+  width: 100%;
   height: fit-content;
 
   grid-template-columns: repeat(${(props) => props.columnsCount}, 1fr);
   grid-template-rows: repeat(${(props) => props.rowsCount}, auto);
 
-  column-gap: 20px;
-  row-gap: 20px;
+  column-gap: 15px;
+  row-gap: 15px;
 `;
 
 interface DashboardGridItemProps {

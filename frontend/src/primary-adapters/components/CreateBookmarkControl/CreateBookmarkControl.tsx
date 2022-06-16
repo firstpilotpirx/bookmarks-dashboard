@@ -38,8 +38,11 @@ const CreateButton = styled.button`
   border-radius: 7px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 7px
-  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.9);
+  //box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.9);
+  box-shadow: none;
   backdrop-filter: blur(15px);
+
+  user-select: none;
 
   &:hover {
     background-color: #014ab8;

@@ -12,6 +12,7 @@ import { DeleteOneBookmarkUseCase } from '../core/bookmark/use-cases/delete-one-
 import { GridPosition } from '@bookmarks-dashboard/domain/dist/bookmark/entities/grid-position';
 import { CreateNewGridUseCase } from '../core/bookmark/use-cases/create-new-grid.use-case';
 import { DeleteOneGridUseCase } from '../core/bookmark/use-cases/delete-one-grid.use-case';
+import { ChangeGridNameUseCase } from '../core/bookmark/use-cases/change-grid-name.use-case';
 
 export class ServerParam {
   constructor(public readonly host: string, public readonly port: number) {}
@@ -37,6 +38,7 @@ export class FastifyServerService {
   private deleteOneBookmarkUseCase = new DeleteOneBookmarkUseCase(this.bookmarkRepository);
   private createNewGridUseCase = new CreateNewGridUseCase(this.bookmarkRepository);
   private deleteOneGridUseCase = new DeleteOneGridUseCase(this.bookmarkRepository);
+  private changeGridNameUseCase = new ChangeGridNameUseCase(this.bookmarkRepository);
 
   constructor(private port: number = 3334) {
     this.server.register(generated, { origin: true });
@@ -44,6 +46,7 @@ export class FastifyServerService {
     this.readDashboard();
 
     this.createNewGrid();
+    this.changeGridName();
     this.deleteOneGrid();
 
     this.setNewBookmark();
@@ -60,6 +63,15 @@ export class FastifyServerService {
   private createNewGrid(): void {
     this.server.post('/dashboard/grid', async (_request, _reply) => {
       await this.createNewGridUseCase.execute();
+      return { result: 'ok' };
+    });
+  }
+
+  private changeGridName(): void {
+    this.server.put('/dashboard/grid/:gridIndex/name', async (request, _reply) => {
+      const params = request.params as { gridIndex: number };
+      const body = request.body as { newName: string };
+      await this.changeGridNameUseCase.execute(params.gridIndex, body.newName);
       return { result: 'ok' };
     });
   }

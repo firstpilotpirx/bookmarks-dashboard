@@ -7,7 +7,7 @@ export declare class Dashboard {
     constructor(defaultGridSize?: GridSize | DashboardState);
     createGrid(gridRowCount?: number, gridColumnCount?: number): void;
     getAllGrids(): Grid[];
-    getGrid(gridIndex: number): Grid | undefined;
+    getGrid(gridIndex: number): Grid;
     deleteGrid(gridIndex: number): void;
     getState(): DashboardState;
     private setState;
