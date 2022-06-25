@@ -1,1 +1,0 @@
-{"version":3,"file":"dashboard.state.d.ts","sourceRoot":"","sources":["../../../src/bookmark/entities/dashboard.state.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,cAAc,CAAC;AACzC,OAAO,EAAE,aAAa,EAAE,MAAM,mBAAmB,CAAC;AAElD,MAAM,WAAW,cAAc;IAC7B,eAAe,EAAE,aAAa,CAAC;IAC/B,KAAK,EAAE,SAAS,EAAE,CAAC;CACpB"}

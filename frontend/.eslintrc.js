@@ -4,7 +4,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb'],
+  extends: ['plugin:react/recommended', 'airbnb', 'plugin:storybook/recommended'],
   parser: '@typescript-eslint/parser',
   plugins: ['react', '@typescript-eslint'],
   parserOptions: {
@@ -16,7 +16,12 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'max-len': ['warn', { code: 140 }],
+    'max-len': [
+      'warn',
+      {
+        code: 140,
+      },
+    ],
     '@typescript-eslint/interface-name-prefix': 'off',
     'react/require-default-props': 'off',
     '@typescript-eslint/explicit-function-return-type': [
@@ -40,7 +45,13 @@ module.exports = {
     '@typescript-eslint/indent': 'off',
     'object-curly-newline': 'off',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      },
+    ],
     '@typescript-eslint/naming-convention': [
       'error',
       {
@@ -63,7 +74,12 @@ module.exports = {
     'prefer-regex-literals': 'warn',
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'warn',
-    'no-empty': ['error', { allowEmptyCatch: true }],
+    'no-empty': [
+      'error',
+      {
+        allowEmptyCatch: true,
+      },
+    ],
     'no-continue': 'off',
     'global-require': 'warn',
     'max-classes-per-file': 'warn',
@@ -75,7 +91,12 @@ module.exports = {
     'jsx-a11y/media-has-caption': ['off'],
     'react/jsx-one-expression-per-line': ['off'],
     'react/jsx-no-bind': ['off'],
-    'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    'react/jsx-filename-extension': [
+      2,
+      {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    ],
     'import/extensions': [
       'error',
       'ignorePackages',

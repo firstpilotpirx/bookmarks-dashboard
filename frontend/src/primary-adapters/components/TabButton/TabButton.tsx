@@ -8,6 +8,9 @@ const TabButtonContainer = styled.div`
 
   padding: 10px;
 
+  width: fit-content;
+  height: fit-content;
+
   cursor: auto;
   user-select: none;
   overflow: hidden;
@@ -47,6 +50,9 @@ const ActiveTabButton = styled.div`
   padding-left: 40px;
   padding-right: 40px;
 
+  width: fit-content;
+  height: fit-content;
+
   border-style: solid;
   text-align: center;
 
@@ -77,6 +83,9 @@ const NotActiveTabButton = styled.div`
   padding-left: 40px;
   padding-right: 40px;
 
+  width: fit-content;
+  height: fit-content;
+
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 7px;
 
@@ -98,6 +107,9 @@ export const CreateTabButton = styled.div`
   padding-left: 19px;
   padding-right: 19px;
 
+  width: fit-content;
+  height: fit-content;
+
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 7px;
 
@@ -118,6 +130,9 @@ const EditTabButton = styled.input`
   padding-bottom: 10px;
   padding-left: 40px;
   padding-right: 40px;
+
+  width: fit-content;
+  height: fit-content;
 
   color: white;
   font-size: 16px;
@@ -206,15 +221,17 @@ export const TabButton = ({ name, isActive, onClick, onChangeGridName, onDelete 
 
   if (isEditMode) {
     return (
-      <EditTabButton
-        ref={inputRef}
-        type="text"
-        value={newName}
-        onChange={onChangeHandler}
-        onKeyDown={onKeyDownHandler}
-        onClick={onClickInput}
-        onBlur={onFocusOut}
-      />
+      <TabButtonContainer>
+        <EditTabButton
+          ref={inputRef}
+          type="text"
+          value={newName}
+          onChange={onChangeHandler}
+          onKeyDown={onKeyDownHandler}
+          onClick={onClickInput}
+          onBlur={onFocusOut}
+        />
+      </TabButtonContainer>
     );
   }
 

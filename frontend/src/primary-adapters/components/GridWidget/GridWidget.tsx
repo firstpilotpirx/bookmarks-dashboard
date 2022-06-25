@@ -72,8 +72,7 @@ export const GridWidget = ({ grid, onClickSetBookmark, onClickDeleteBookmark }: 
           {widget}
         </GridItem>
       );
-    }),
-  );
+    }));
 
   return (
     <DashboardGridContainer rowsCount={grid.size.rowCount} columnsCount={grid.size.columnCount}>

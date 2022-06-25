@@ -1,0 +1,15 @@
+import {Meta, Story} from '@storybook/addon-docs';
+
+import {TabButton} from './TabButton';
+
+<Meta title="TabButton" component={TabButton} />
+
+# TabButton
+
+<Story name="Active Tab">
+  <TabButton name={"Tab 1"} isActive={true} onClick={() => {} } onChangeGridName={() => {}} onDelete={() => {} }>Button</TabButton>
+</Story>
+
+<Story name="Not Active Tab">
+  <TabButton name={"Tab 1"} isActive={false} onClick={() => {} } onChangeGridName={() => {}} onDelete={() => {} }>Button</TabButton>
+</Story>

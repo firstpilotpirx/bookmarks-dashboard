@@ -27,11 +27,9 @@ export class BookmarkFactoryService {
         .then((value) => value)
         .catch(() => this.defaultPagePreview),
     ]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const smallPreview = await this.base64ResizerService.resize(preview, 1600 / 4, 1600 / 4);
 
-    return new Bookmark(id, url, name, icon, preview);
+    const smallPreview = await this.base64ResizerService.resize(preview);
+
+    return new Bookmark(id, url, name, icon, smallPreview);
   }
 }

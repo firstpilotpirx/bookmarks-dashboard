@@ -119,20 +119,19 @@ export const DashboardTab = ({}: DashboardTabProps): JSX.Element => {
     currentGrid = dashboard.getGrid(selectedGridIndex);
   } catch (error) {}
 
-  const gridWidget =
-    currentGrid === undefined ? null : (
-      <GridWidget
-        grid={currentGrid}
-        onClickSetBookmark={async (position: GridPosition, url: string, name: string) => {
-          await setNewBookmarkUseCase.execute(selectedGridIndex, position, url, name);
-          setDashboard(await readDashboardUseCase.execute());
-        }}
-        onClickDeleteBookmark={async (position: GridPosition) => {
-          await deleteOneBookmarkUseCase.execute(selectedGridIndex, position);
-          setDashboard(await readDashboardUseCase.execute());
-        }}
-      />
-    );
+  const gridWidget = currentGrid === undefined ? null : (
+    <GridWidget
+      grid={currentGrid}
+      onClickSetBookmark={async (position: GridPosition, url: string, name: string) => {
+        await setNewBookmarkUseCase.execute(selectedGridIndex, position, url, name);
+        setDashboard(await readDashboardUseCase.execute());
+      }}
+      onClickDeleteBookmark={async (position: GridPosition) => {
+        await deleteOneBookmarkUseCase.execute(selectedGridIndex, position);
+        setDashboard(await readDashboardUseCase.execute());
+      }}
+    />
+  );
 
   return isLoading ? (
     <FullScreenSpinner />

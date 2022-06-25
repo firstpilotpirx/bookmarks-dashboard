@@ -1,1 +1,0 @@
-{"version":3,"file":"bookmark-state.d.ts","sourceRoot":"","sources":["../../../src/bookmark/entities/bookmark-state.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,aAAa;IAC5B,EAAE,EAAE,MAAM,CAAC;IACX,GAAG,EAAE,MAAM,CAAC;IACZ,QAAQ,EAAE,MAAM,CAAC;IACjB,IAAI,EAAE,MAAM,CAAC;IACb,UAAU,EAAE,MAAM,CAAC;IACnB,aAAa,EAAE,MAAM,CAAC;CACvB"}
