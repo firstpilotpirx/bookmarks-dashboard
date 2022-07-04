@@ -1,6 +1,6 @@
-import { Bookmark } from './bookmark';
-import { GridPosition } from './grid-position';
-import { GridSize } from './grid-size';
+import { Bookmark } from '../bookmark/bookmark';
+import { GridPosition } from '../grid-position/grid-position';
+import { GridSize } from '../grid-size/grid-size';
 import { GridState } from './grid.state';
 
 export class Grid {

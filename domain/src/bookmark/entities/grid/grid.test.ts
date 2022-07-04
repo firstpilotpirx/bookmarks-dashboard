@@ -1,7 +1,7 @@
 import { Grid } from './grid';
-import { Bookmark } from './bookmark';
-import { GridPosition } from './grid-position';
-import { GridSize } from './grid-size';
+import { Bookmark } from '../bookmark/bookmark';
+import { GridPosition } from '../grid-position/grid-position';
+import { GridSize } from '../grid-size/grid-size';
 
 describe('Unit Test Grid', () => {
   test('should create with row and colum', async () => {

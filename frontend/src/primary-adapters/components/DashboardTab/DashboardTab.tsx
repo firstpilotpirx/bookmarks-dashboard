@@ -8,10 +8,12 @@ import { SetNewBookmarkUseCase } from '../../../core/bookmark/use-cases/set-new-
 import { ReadDashboardUseCase } from '../../../core/bookmark/use-cases/read-dashboard.use-case';
 import { DeleteBookmarkUseCase } from '../../../core/bookmark/use-cases/delete-bookmark.use-case';
 import { FullScreenSpinner } from '../FullScreenSpinner/FullScreenSpinner';
-import { CreateTabButton, TabButton } from '../TabButton/TabButton';
 import { ChangeGridNameUseCase } from '../../../core/bookmark/use-cases/change-grid-name.use-case';
 import { CreateGridUseCase } from '../../../core/bookmark/use-cases/create-grid.use-case';
 import { DeleteGridUseCase } from '../../../core/bookmark/use-cases/delete-grid.use-case';
+import { CreateTabButton } from '../CreateTabButton/CreateTabButton';
+import { TabButton } from '../TabButton/TabButton';
+import { TabBar } from '../TabBar/TabBar';
 
 const TabContainer = styled.div`
   margin: 0;
@@ -20,31 +22,6 @@ const TabContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
   height: fit-content;
-`;
-
-const TabBar = styled.div`
-  padding-top: 0;
-  padding-bottom: 0;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 0 0;
-
-  background-color: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 7px;
-  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(15px);
-
-  color: white;
-  text-transform: uppercase;
-  font-weight: bold;
-
-  cursor: auto;
-
-  overflow: hidden;
 `;
 
 const TabContent = styled.div`
@@ -119,19 +96,20 @@ export const DashboardTab = ({}: DashboardTabProps): JSX.Element => {
     currentGrid = dashboard.getGrid(selectedGridIndex);
   } catch (error) {}
 
-  const gridWidget = currentGrid === undefined ? null : (
-    <GridWidget
-      grid={currentGrid}
-      onClickSetBookmark={async (position: GridPosition, url: string, name: string) => {
-        await setNewBookmarkUseCase.execute(selectedGridIndex, position, url, name);
-        setDashboard(await readDashboardUseCase.execute());
-      }}
-      onClickDeleteBookmark={async (position: GridPosition) => {
-        await deleteOneBookmarkUseCase.execute(selectedGridIndex, position);
-        setDashboard(await readDashboardUseCase.execute());
-      }}
-    />
-  );
+  const gridWidget =
+    currentGrid === undefined ? null : (
+      <GridWidget
+        grid={currentGrid}
+        onClickSetBookmark={async (position: GridPosition, url: string, name: string) => {
+          await setNewBookmarkUseCase.execute(selectedGridIndex, position, url, name);
+          setDashboard(await readDashboardUseCase.execute());
+        }}
+        onClickDeleteBookmark={async (position: GridPosition) => {
+          await deleteOneBookmarkUseCase.execute(selectedGridIndex, position);
+          setDashboard(await readDashboardUseCase.execute());
+        }}
+      />
+    );
 
   return isLoading ? (
     <FullScreenSpinner />
@@ -144,9 +122,7 @@ export const DashboardTab = ({}: DashboardTabProps): JSX.Element => {
             await createGridUseCase.execute();
             setDashboard(await readDashboardUseCase.execute());
           }}
-        >
-          +
-        </CreateTabButton>
+        />
       </TabBar>
       <TabContent>{gridWidget}</TabContent>
     </TabContainer>

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useRef, useState } from 'react';
 
 const TIMOUT_FOR_SHOW_DELETE_BUTTON = 1500;
@@ -44,7 +44,7 @@ const DeleteTabButton = styled.div`
   }
 `;
 
-const ActiveTabButton = styled.div`
+export const BaseTabButton = css`
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 40px;
@@ -54,19 +54,27 @@ const ActiveTabButton = styled.div`
   height: fit-content;
 
   border-style: solid;
+  border-radius: 7px;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
   text-align: center;
 
   font-size: 16px;
   font-weight: bold;
 
-  background-color: rgba(0, 82, 204, 200);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 7px;
-  backdrop-filter: blur(15px);
-
   cursor: pointer;
 
   user-select: none;
+
+  text-transform: uppercase;
+`;
+
+const ActiveTabButton = styled.div`
+  ${BaseTabButton};
+
+  background-color: rgba(0, 82, 204, 200);
+  backdrop-filter: blur(15px);
 
   &:hover {
     background-color: #014ab8;
@@ -78,71 +86,19 @@ const ActiveTabButton = styled.div`
 `;
 
 const NotActiveTabButton = styled.div`
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 40px;
-  padding-right: 40px;
-
-  width: fit-content;
-  height: fit-content;
-
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 7px;
+  ${BaseTabButton};
 
   color: white;
-  text-transform: uppercase;
-
-  font-size: 16px;
-  font-weight: bold;
-
-  cursor: pointer;
-  user-select: none;
-
-  overflow: hidden;
-`;
-
-export const CreateTabButton = styled.div`
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 19px;
-  padding-right: 19px;
-
-  width: fit-content;
-  height: fit-content;
-
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 7px;
-
-  color: white;
-  text-transform: uppercase;
-
-  font-size: 16px;
-  font-weight: bold;
-
-  cursor: pointer;
-  user-select: none;
-
-  overflow: hidden;
 `;
 
 const EditTabButton = styled.input`
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 40px;
-  padding-right: 40px;
+  ${BaseTabButton};
 
-  width: fit-content;
-  height: fit-content;
+  user-select: text;
 
   color: white;
-  font-size: 16px;
-  font-weight: bold;
-
-  border-style: solid;
-  text-align: center;
 
   background-color: rgba(0, 82, 204, 200);
-  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 7px;
   backdrop-filter: blur(15px);
 

@@ -22,6 +22,7 @@ module.exports = {
         code: 140,
       },
     ],
+    'react/destructuring-assignment': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     'react/require-default-props': 'off',
     '@typescript-eslint/explicit-function-return-type': [

@@ -1,5 +1,5 @@
 import { Dashboard } from './dashboard';
-import { GridSize } from './grid-size';
+import { GridSize } from '../grid-size/grid-size';
 
 describe('Unit Test Dashboard', () => {
   test('should create empty dashboard', async () => {
