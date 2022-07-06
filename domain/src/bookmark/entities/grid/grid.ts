@@ -2,9 +2,10 @@ import { Bookmark } from '../bookmark/bookmark';
 import { GridPosition } from '../grid-position/grid-position';
 import { GridSize } from '../grid-size/grid-size';
 import { GridState } from './grid.state';
+import { GridRow } from '../grid-row/grid-row';
 
 export class Grid {
-  private grid = new Array<Array<Bookmark | undefined>>();
+  private grid = new Array<GridRow>();
 
   public size = new GridSize(1, 1);
 
@@ -13,11 +14,7 @@ export class Grid {
       this.size = size;
 
       for (let row = 0; row < this.size.rowCount; row++) {
-        const row: Array<Bookmark | undefined> = [];
-        for (let column = 0; column < this.size.columnCount; column++) {
-          row.push(undefined);
-        }
-        this.grid.push(row);
+        this.grid.push(new GridRow(size.columnCount));
       }
     } else {
       this.setState(size);
@@ -25,58 +22,81 @@ export class Grid {
   }
 
   setBookmark(position: GridPosition, bookmark: Bookmark): void {
-    if (position.row >= this.size.rowCount || position.column >= this.size.columnCount) {
-      throw new Error(
-        `Can not set bookmark because out of range, grid size rowCount=${this.size.rowCount}, columnCount=${this.size.columnCount}, but position has row=${position.row}, column=${position.column}`,
-      );
-    }
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.grid[position.row][position.column] = bookmark;
+    this.getRow(position.row).setBookmark(position.column, bookmark);
   }
 
   getBookmark(position: GridPosition): Bookmark | undefined {
-    if (position.row >= this.size.rowCount || position.column >= this.size.columnCount) {
-      throw new Error(
-        `Can not get bookmark because out of range, grid size rowCount=${this.size.rowCount}, columnCount=${this.size.columnCount}, but position has row=${position.row}, column=${position.column}`,
-      );
-    }
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return this.grid[position.row][position.column];
+    return this.getRow(position.row).getBookmark(position.column);
   }
 
-  getAllRows(): Array<Array<Bookmark | undefined>> {
+  // TODO add test
+  getRow(rowIndex: number): GridRow {
+    if (rowIndex >= this.size.rowCount) {
+      throw new Error(`Row index out of range, row count: ${this.size.rowCount}, but row index: ${rowIndex}`);
+    }
+
+    // @ts-ignore
+    return this.grid[rowIndex];
+  }
+
+  getAllRows(): Array<GridRow> {
     return this.grid;
   }
 
   deleteBookmark(position: GridPosition): void {
-    if (position.row >= this.size.rowCount || position.column >= this.size.columnCount) {
-      throw new Error(
-        `Can not delete bookmark because out of range, grid size rowCount=${this.size.rowCount}, columnCount=${this.size.columnCount}, but position has row=${position.row}, column=${position.column}`,
-      );
+    this.getRow(position.row).deleteBookmark(position.column);
+  }
+
+  getSize(): GridSize {
+    return this.size;
+  }
+
+  setSize(size: GridSize): void {
+    const grid = new Array<GridRow>();
+    for (let rowIndex = 0; rowIndex < size.rowCount; rowIndex++) {
+      if (rowIndex < this.size.rowCount) {
+        // @ts-ignore
+        const row = this.grid[rowIndex];
+        // @ts-ignore
+        row.setSize(size.columnCount);
+        // @ts-ignore
+        grid.push(row);
+      } else {
+        grid.push(new GridRow(size.columnCount));
+      }
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.grid[position.row][position.column] = undefined;
+    this.grid = grid;
+    this.size = size;
+  }
+
+  addRowAtTheEnd(): void {
+    this.setSize(new GridSize(this.size.rowCount + 1, this.size.columnCount));
+  }
+
+  deleteLastRow(): void {
+    this.setSize(new GridSize(this.size.rowCount - 1, this.size.columnCount));
+  }
+
+  addColumnAtTheEnd(): void {
+    this.setSize(new GridSize(this.size.rowCount, this.size.columnCount + 1));
+  }
+
+  deleteLastColumn(): void {
+    this.setSize(new GridSize(this.size.rowCount, this.size.columnCount - 1));
   }
 
   getState(): GridState {
     return {
       name: this.name,
       size: this.size.getState(),
-      grid: this.grid.map((row) => row.map((item) => item?.getState())),
+      grid: this.grid.map((row) => row.getState()),
     };
   }
 
   private setState(state: GridState): void {
     this.name = state.name;
     this.size = new GridSize(state.size);
-    this.grid = state.grid.map((row) =>
-      row.map((itemState) => (itemState === undefined || itemState === null ? undefined : new Bookmark(itemState))),
-    );
+    this.grid = state.grid.map((row) => new GridRow(row));
   }
 }

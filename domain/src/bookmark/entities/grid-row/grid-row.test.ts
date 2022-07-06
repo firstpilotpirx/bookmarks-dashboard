@@ -1,5 +1,6 @@
 import { GridRow } from './grid-row';
 import { Bookmark } from '../bookmark/bookmark';
+import { GridRowState } from './grid-row-state';
 
 describe('Unit Test GridRow', () => {
   const bookmark0 = new Bookmark('id0', 'https://stackoverflow0.com', 'name0', 'icon0', 'preview0');
@@ -105,6 +106,16 @@ describe('Unit Test GridRow', () => {
     });
   });
 
+  test('should create from state', async () => {
+    const row = new GridRow({
+      bookmarks: [bookmark0.getState(), undefined, bookmark2.getState()],
+    } as GridRowState);
+
+    expect(row.getState()).toEqual({
+      bookmarks: [bookmark0.getState(), undefined, bookmark2.getState()],
+    });
+  });
+
   test('should get right state', async () => {
     const row = new GridRow(3);
 
@@ -114,5 +125,33 @@ describe('Unit Test GridRow', () => {
     expect(row.getState()).toEqual({
       bookmarks: [bookmark0.getState(), undefined, bookmark2.getState()],
     });
+  });
+
+  test('should get right state', async () => {
+    const row = new GridRow(3);
+
+    row.setBookmark(0, bookmark0);
+    row.setBookmark(2, bookmark2);
+    row.deleteBookmark(2);
+
+    expect(row.getState()).toEqual({
+      bookmarks: [bookmark0.getState(), undefined, undefined],
+    });
+  });
+
+  test('should add column', async () => {
+    const row = new GridRow(3);
+    row.addColumnAtTheEnd();
+
+    expect(row.getSize()).toEqual(4);
+    expect(row.getAllBookmarks()).toEqual([undefined, undefined, undefined, undefined]);
+  });
+
+  test('should delete column', async () => {
+    const row = new GridRow(3);
+    row.deleteLastColumn();
+
+    expect(row.getSize()).toEqual(2);
+    expect(row.getAllBookmarks()).toEqual([undefined, undefined]);
   });
 });

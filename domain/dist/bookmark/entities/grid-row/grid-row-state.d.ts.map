@@ -1,0 +1,1 @@
+{"version":3,"file":"grid-row-state.d.ts","sourceRoot":"","sources":["../../../../src/bookmark/entities/grid-row/grid-row-state.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,aAAa,EAAE,MAAM,4BAA4B,CAAC;AAE3D,qBAAa,YAAY;IACvB,SAAS,EAAE,KAAK,CAAC,aAAa,GAAG,SAAS,CAAC,CAAM;CAClD"}

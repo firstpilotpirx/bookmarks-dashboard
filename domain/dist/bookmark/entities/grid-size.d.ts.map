@@ -1,1 +1,0 @@
-{"version":3,"file":"grid-size.d.ts","sourceRoot":"","sources":["../../../src/bookmark/entities/grid-size.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,aAAa,EAAE,MAAM,mBAAmB,CAAC;AAElD,qBAAa,QAAQ;IACnB,OAAO,CAAC,KAAK,CAAgB;gBAEjB,QAAQ,EAAE,MAAM,GAAG,aAAa,EAAE,WAAW,CAAC,EAAE,MAAM;IAgBlE,IAAI,QAAQ,IAAI,MAAM,CAErB;IAED,IAAI,WAAW,IAAI,MAAM,CAExB;IAED,QAAQ,IAAI,aAAa;CAG1B"}

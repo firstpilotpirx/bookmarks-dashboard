@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dashboard = void 0;
-const grid_1 = require("./grid");
-const grid_size_1 = require("./grid-size");
+const grid_1 = require("../grid/grid");
+const grid_size_1 = require("../grid-size/grid-size");
 class Dashboard {
     grids = [];
     defaultGridSize = new grid_size_1.GridSize(5, 5);

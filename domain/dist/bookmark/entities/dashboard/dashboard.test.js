@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const dashboard_1 = require("./dashboard");
-const grid_size_1 = require("./grid-size");
+const grid_size_1 = require("../grid-size/grid-size");
 describe('Unit Test Dashboard', () => {
     test('should create empty dashboard', async () => {
         const dashboard = new dashboard_1.Dashboard();
@@ -79,33 +79,45 @@ describe('Unit Test Dashboard', () => {
         dashboard.createGrid();
         expect(dashboard.getState()).toEqual({
             defaultGridSize: {
-                rowCount: 1,
                 columnCount: 2,
+                rowCount: 1,
             },
             grids: [
                 {
+                    grid: [
+                        {
+                            bookmarks: [undefined, undefined],
+                        },
+                    ],
                     name: '0',
                     size: {
                         columnCount: 2,
                         rowCount: 1,
                     },
-                    grid: [[undefined, undefined]],
                 },
                 {
+                    grid: [
+                        {
+                            bookmarks: [undefined, undefined],
+                        },
+                    ],
                     name: '1',
                     size: {
                         columnCount: 2,
                         rowCount: 1,
                     },
-                    grid: [[undefined, undefined]],
                 },
                 {
+                    grid: [
+                        {
+                            bookmarks: [undefined, undefined],
+                        },
+                    ],
                     name: '2',
                     size: {
                         columnCount: 2,
                         rowCount: 1,
                     },
-                    grid: [[undefined, undefined]],
                 },
             ],
         });
@@ -113,33 +125,45 @@ describe('Unit Test Dashboard', () => {
     test('should load from state', async () => {
         const state = {
             defaultGridSize: {
-                rowCount: 1,
                 columnCount: 2,
+                rowCount: 1,
             },
             grids: [
                 {
+                    grid: [
+                        {
+                            bookmarks: [undefined, undefined],
+                        },
+                    ],
                     name: '0',
                     size: {
                         columnCount: 2,
                         rowCount: 1,
                     },
-                    grid: [[undefined, undefined]],
                 },
                 {
+                    grid: [
+                        {
+                            bookmarks: [undefined, undefined],
+                        },
+                    ],
                     name: '1',
                     size: {
                         columnCount: 2,
                         rowCount: 1,
                     },
-                    grid: [[undefined, undefined]],
                 },
                 {
+                    grid: [
+                        {
+                            bookmarks: [undefined, undefined],
+                        },
+                    ],
                     name: '2',
                     size: {
                         columnCount: 2,
                         rowCount: 1,
                     },
-                    grid: [[undefined, undefined]],
                 },
             ],
         };
@@ -153,15 +177,4 @@ describe('Unit Test Dashboard', () => {
         // @ts-ignore
         expect(allGrids[2].name).toEqual('2');
     });
-    // xtest('test', async () => {
-    //   const dashboard = new Dashboard();
-    //
-    //   dashboard.getAllGrids();
-    //   dashboard.getGrid(1)?.name;
-    //   dashboard.getGrid(1)?.size.rowCount;
-    //   dashboard.getGrid(1)?.size.columnCount;
-    //   dashboard.getGrid(1)?.getBookmark(new GridPosition(1, 1));
-    //   dashboard.getGrid(1)?.setBookmark(new GridPosition(1, 1), new Bookmark());
-    //   dashboard.getAllGrids().forEach(grid => grid.getAllRows.forEach(row => row.forEach(item => item.url)));
-    // });
 });

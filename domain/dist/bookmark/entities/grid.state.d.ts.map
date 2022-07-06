@@ -1,1 +1,0 @@
-{"version":3,"file":"grid.state.d.ts","sourceRoot":"","sources":["../../../src/bookmark/entities/grid.state.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,aAAa,EAAE,MAAM,kBAAkB,CAAC;AACjD,OAAO,EAAE,aAAa,EAAE,MAAM,mBAAmB,CAAC;AAElD,MAAM,WAAW,SAAS;IACxB,IAAI,EAAE,MAAM,CAAC;IACb,IAAI,EAAE,aAAa,CAAC;IACpB,IAAI,EAAE,KAAK,CAAC,KAAK,CAAC,aAAa,GAAG,SAAS,CAAC,CAAC,CAAC;CAC/C"}

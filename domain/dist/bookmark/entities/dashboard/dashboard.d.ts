@@ -1,5 +1,5 @@
-import { Grid } from './grid';
-import { GridSize } from './grid-size';
+import { Grid } from '../grid/grid';
+import { GridSize } from '../grid-size/grid-size';
 import { DashboardState } from './dashboard.state';
 export declare class Dashboard {
     private grids;

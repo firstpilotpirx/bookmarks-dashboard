@@ -5,7 +5,8 @@ export class GridRow {
   private bookmarks: Array<Bookmark | undefined> = [];
 
   constructor(size: number | GridRowState = 0) {
-    if (size instanceof GridRowState) {
+    if (Number.isNaN(Number(size))) {
+      // @ts-ignore
       this.setState(size);
       return;
     }
@@ -35,11 +36,19 @@ export class GridRow {
     this.bookmarks = bookmarks;
   }
 
+  addColumnAtTheEnd(): void {
+    this.setSize(this.getSize() + 1);
+  }
+
+  deleteLastColumn(): void {
+    this.setSize(this.getSize() - 1);
+  }
+
   getSize(): number {
     return this.bookmarks.length;
   }
 
-  setBookmark(position: number, bookmark: Bookmark): void {
+  setBookmark(position: number, bookmark: Bookmark | undefined): void {
     if (position >= this.bookmarks.length) {
       throw new Error(`Can not set bookmark because out of range, rowSize=${this.bookmarks.length}, but position is=${position}`);
     }
@@ -63,6 +72,10 @@ export class GridRow {
     return {
       bookmarks: this.bookmarks.map((bookmark) => (bookmark === undefined ? undefined : bookmark.getState())),
     };
+  }
+
+  deleteBookmark(position: number): void {
+    this.setBookmark(position, undefined);
   }
 
   private setState(state: GridRowState): void {
